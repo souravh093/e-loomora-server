@@ -11,6 +11,15 @@ const createProductValidation = z.object({
     inventoryCount: z.number({
       required_error: 'Product inventory count is required',
     }),
+    productImages: z
+      .array(
+        z.object({
+          url: z
+            .string({ required_error: 'Product image URL is required' })
+            .url({ message: 'Invalid URL' }),
+        }),
+      )
+      .optional(),
     categoryId: z.string({ required_error: 'Product category is required' }),
     shopId: z.string({ required_error: 'Product shop is required' }),
   }),
