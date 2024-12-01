@@ -27,6 +27,7 @@ const getProductById = async (id: string) => {
     },
     include: {
       productImage: true,
+      review: true,
     },
   });
 
@@ -53,6 +54,7 @@ const getProducts = async (query: Record<string, any>) => {
     ...productQuery,
     include: {
       productImage: true,
+      review: true,
     },
   });
 
