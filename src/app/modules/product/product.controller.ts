@@ -51,7 +51,7 @@ const deleteProduct = catchAsync(async (req, res) => {
   await ProductService.deleteProductFromDB(req.params.id);
 
   sendResponse(res, {
-    statusCode: 204,
+    statusCode: 200,
     success: true,
     message: 'Product deleted successfully',
   });

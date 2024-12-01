@@ -2,9 +2,16 @@ import { Product } from '@prisma/client';
 import prisma from '../../../db/db.config';
 import { buildPrismaQuery } from '../../builder/prismaBuilderQuery';
 
-const createProductIntoDB = async (payload: Product) => {
+const createProductIntoDB = async (payload: any) => {
   const result = await prisma.product.create({
-    data: payload,
+    data: {
+      ...payload,
+      productImage: {
+        create: payload.productImage.map((image: { url: string }) => ({
+          url: image.url,
+        })),
+      },
+    },
     include: {
       productImage: true,
     },
@@ -40,7 +47,7 @@ const getProducts = async (query: Record<string, any>) => {
     where: productQuery.where,
   });
 
-  const totalPages = Math.ceil(productItems / query.limit);
+  const totalPages = Math.ceil(productItems / productQuery.take);
 
   const result = await prisma.product.findMany({
     ...productQuery,
@@ -52,7 +59,7 @@ const getProducts = async (query: Record<string, any>) => {
   return {
     meta: {
       total: productItems,
-      limit: query.limit,
+      limit: productQuery.take,
       page: totalPages,
     },
     result,
