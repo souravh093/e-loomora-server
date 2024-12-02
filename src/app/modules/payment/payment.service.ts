@@ -11,29 +11,34 @@ const confirmationService = async (
   const verifyResponse = await verifyPayment(transactionId);
 
   if (verifyResponse && verifyResponse?.pay_status === 'Successful') {
-    const finalPayment = await prisma.$transaction(async (prisma) => {
+    await prisma.$transaction(async (prisma) => {
       const userData = await prisma.user.findUniqueOrThrow({
         where: {
           email,
         },
       });
 
+      const orderData = await prisma.order.findFirstOrThrow({
+        where: {
+          userId: userData.id,
+        },
+      });
+
+      const paymentData = await prisma.payment.findFirstOrThrow({
+        where: {
+          transactionId: transactionId,
+        },
+      });
+
       await prisma.payment.update({
         where: {
-          id: transactionId,
+          id: paymentData.id,
         },
         data: {
           status: PaymentStatus.COMPLETED,
         },
       });
-
-      const orderData = await prisma.order.findFirstOrThrow({
-        where: {
-          userId: userData.id,
-        }
-      })
-
-      const updateOrder = await prisma.order.update({
+      await prisma.order.update({
         where: {
           id: orderData.id,
         },
@@ -41,11 +46,7 @@ const confirmationService = async (
           status: PaymentStatus.COMPLETED,
         },
       });
-
-      return updateOrder;
     });
-
-    return finalPayment;
   }
 
   const successTemplate = `
