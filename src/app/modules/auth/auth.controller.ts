@@ -14,7 +14,7 @@ const loginUser = catchAsync(async (req, res) => {
 });
 
 const forgetPassword = catchAsync(async (req, res) => {
-  const result = await AuthServices.forgetPasswordIntoDB(req.body);
+  const result = await AuthServices.forgetPasswordIntoDB(req.body.email);
 
   sendResponse(res, {
     statusCode: 200,
