@@ -5,6 +5,8 @@ import { ShopRoutes } from '../modules/shop/shop.routes';
 import { CategoriesRoutes } from '../modules/category/category.routes';
 import { ProductRoutes } from '../modules/product/product.routes';
 import { ReviewRoutes } from '../modules/review/review.routes';
+import { CouponRoutes } from '../modules/coupon/coupon.routes';
+import { OrderRoutes } from '../modules/order/order.routes';
 
 const router = Router();
 
@@ -30,9 +32,17 @@ const moduleRoutes = [
     route: ProductRoutes,
   },
   {
-    path: "/reviews",
+    path: '/reviews',
     route: ReviewRoutes,
-  }
+  },
+  {
+    path: '/coupons',
+    route: CouponRoutes,
+  },
+  {
+    path: '/orders',
+    route: OrderRoutes,
+  },
 ];
 
 moduleRoutes.forEach((route) => router.use(route.path, route.route));

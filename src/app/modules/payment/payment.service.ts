@@ -1,8 +1,7 @@
-import { JwtPayload } from 'jsonwebtoken';
 import config from '../../config';
-import { initiatePayment, verifyPayment } from './payment.utils';
-import AppError from '../../errors/AppError';
-
+import { verifyPayment } from './payment.utils';
+import prisma from '../../../db/db.config';
+import { PaymentStatus } from '@prisma/client';
 
 const confirmationService = async (
   transactionId: string,
@@ -12,13 +11,41 @@ const confirmationService = async (
   const verifyResponse = await verifyPayment(transactionId);
 
   if (verifyResponse && verifyResponse?.pay_status === 'Successful') {
-    await User.findOneAndUpdate(
-      { email },
-      {
-        $set: { premiumMember: true },
-      },
-      { new: true },
-    );
+    const finalPayment = await prisma.$transaction(async (prisma) => {
+      const userData = await prisma.user.findUniqueOrThrow({
+        where: {
+          email,
+        },
+      });
+
+      await prisma.payment.update({
+        where: {
+          id: transactionId,
+        },
+        data: {
+          status: PaymentStatus.COMPLETED,
+        },
+      });
+
+      const orderData = await prisma.order.findFirstOrThrow({
+        where: {
+          userId: userData.id,
+        }
+      })
+
+      const updateOrder = await prisma.order.update({
+        where: {
+          id: orderData.id,
+        },
+        data: {
+          status: PaymentStatus.COMPLETED,
+        },
+      });
+
+      return updateOrder;
+    });
+
+    return finalPayment;
   }
 
   const successTemplate = `
@@ -80,74 +107,20 @@ const confirmationService = async (
   return successTemplate;
 };
 
-const paymentForMonetization = async (
-  loggerUser: JwtPayload,
-  amount: string,
-) => {
-  const isExistUser = await User.findOne({ email: loggerUser.email });
+// const getPaymentInfoUser = async (loggerUser: JwtPayload) => {
+//   const payment = await User.findOne({
+//     email: loggerUser.email,
+//     premiumMember: true,
+//   });
 
-  if (!isExistUser) {
-    throw new AppError(200, 'User not found');
-  }
+//   if (!payment) {
+//     throw new AppError(200, 'User not found');
+//   }
 
-  if (isExistUser.premiumMember) {
-    throw new AppError(200, 'You are already a premium member');
-  }
-
-  const transactionId = `TXN-${Date.now()}${Math.floor(10000 + Math.random()) * 90000}`;
-
-  const paymentInfo = {
-    transactionId,
-    amount,
-    customerName: isExistUser.name,
-    customerEmail: isExistUser.email,
-    customerPhone: isExistUser.phone,
-    customerAddress: isExistUser.address,
-  };
-
-  const paymentSession = await initiatePayment(paymentInfo);
-
-  const result = await User.findOneAndUpdate(
-    {
-      email: loggerUser.email,
-    },
-    {
-      $set: {
-        transactionId,
-      },
-    },
-  );
-
-  if (isExistUser) {
-    await User.findOneAndUpdate(
-      { email: loggerUser.email },
-      {
-        $set: { premiumMember: true },
-      },
-    );
-  }
-
-  return {
-    result,
-    paymentSession,
-  };
-};
-
-const getPaymentInfoUser = async (loggerUser: JwtPayload) => {
-  const payment = await User.findOne({
-    email: loggerUser.email,
-    premiumMember: true,
-  });
-
-  if (!payment) {
-    throw new AppError(200, 'User not found');
-  }
-
-  return payment;
-};
+//   return payment;
+// };
 
 export const PaymentServices = {
   confirmationService,
-  paymentForMonetization,
-  getPaymentInfoUser,
+  // getPaymentInfoUser,
 };

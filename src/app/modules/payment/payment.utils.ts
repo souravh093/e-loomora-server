@@ -1,10 +1,11 @@
 import axios from 'axios';
 import dotenv from 'dotenv';
 import config from '../../config';
+import { TPayment } from '../../types/paymentTypes';
 
 dotenv.config();
 
-export const initiatePayment = async (paymentData) => {
+export const initiatePayment = async (paymentData: TPayment) => {
   const res = await axios.post(config.payment_url!, {
     store_id: config.store_id,
     tran_id: paymentData.transactionId,

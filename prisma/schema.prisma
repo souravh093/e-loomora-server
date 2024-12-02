@@ -19,6 +19,12 @@ enum OrderStatus {
   CANCELLED
 }
 
+enum PaymentStatus {
+  PENDING
+  COMPLETED
+  FAILED
+}
+
 model User {
   id        String   @id @default(uuid())
   name      String
@@ -102,6 +108,7 @@ model ShippingAddress {
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId    String   @unique
   address   String
+  phone     String
   city      String
   state     String
   country   String
@@ -131,6 +138,16 @@ model OrderItem {
   productId String
   quantity  Int
   price     Float
+}
+
+model Payment {
+  id            String        @id @default(uuid())
+  orderId       String
+  transactionId String
+  method        String        @default("aamarPay")
+  amount        Float
+  status        PaymentStatus @default(PENDING)
+  createdAt     DateTime      @default(now())
 }
 
 model Review {
