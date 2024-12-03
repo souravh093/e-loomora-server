@@ -13,6 +13,16 @@ enum Role {
   ADMIN
 }
 
+enum UserStatus {
+  SUSPENDED
+  ACTIVE
+}
+
+enum ShopStatus {
+  RESTRICTED
+  ACTIVE
+}
+
 enum OrderStatus {
   PENDING
   COMPLETED
@@ -26,15 +36,16 @@ enum PaymentStatus {
 }
 
 model User {
-  id        String   @id @default(uuid())
+  id        String     @id @default(uuid())
   name      String
-  email     String   @unique
+  email     String     @unique
   password  String
-  image     String?  @db.Text
-  role      Role     @default(USER)
+  image     String?    @db.Text
+  role      Role       @default(USER)
+  status    UserStatus @default(ACTIVE)
   shop      Shop?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
 
   cartItem        CartItem[]
   order           Order[]
@@ -43,14 +54,15 @@ model User {
 }
 
 model Shop {
-  id          String   @id @default(uuid())
+  id          String     @id @default(uuid())
   name        String
-  logoUrl     String?  @db.Text
-  description String?  @db.Text
-  owner       User     @relation(fields: [ownerId], references: [id], onDelete: Cascade)
-  ownerId     String   @unique
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  logoUrl     String?    @db.Text
+  description String?    @db.Text
+  status      ShopStatus @default(ACTIVE)
+  owner       User       @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  ownerId     String     @unique
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
 
   product Product[]
   order   Order[]

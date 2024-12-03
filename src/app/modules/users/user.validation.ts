@@ -18,6 +18,7 @@ const updateUserValidationSchema = z.object({
   body: z.object({
     name: z.string({ required_error: 'Name is required' }).optional(),
     image: z.string().optional(),
+    status: z.string().optional(),
   }),
 });
 

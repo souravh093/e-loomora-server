@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Shop } from '@prisma/client';
 import prisma from '../../../db/db.config';
 import { buildPrismaQuery } from '../../builder/prismaBuilderQuery';
@@ -69,6 +70,9 @@ const getShopsFromDB = async (query: Record<string, any>) => {
 
   const result = await prisma.shop.findMany({
     ...shopQuery,
+    include: {
+      owner: true,
+    }
   });
 
   return {

@@ -24,7 +24,8 @@ router.delete(
   auth(Role.ADMIN, Role.USER, Role.VENDOR),
   ShopController.deleteShop,
 );
-router.get('/:id', ShopController.getShopById);
+
 router.get('/', ShopController.getShops);
+router.get('/:id', ShopController.getShopById);
 
 export const ShopRoutes = router;
