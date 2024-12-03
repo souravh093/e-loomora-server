@@ -108,20 +108,13 @@ const confirmationService = async (
   return successTemplate;
 };
 
-// const getPaymentInfoUser = async (loggerUser: JwtPayload) => {
-//   const payment = await User.findOne({
-//     email: loggerUser.email,
-//     premiumMember: true,
-//   });
+const getPayments = async () => {
+  const result = await prisma.payment.findMany();
 
-//   if (!payment) {
-//     throw new AppError(200, 'User not found');
-//   }
-
-//   return payment;
-// };
+  return result;
+};
 
 export const PaymentServices = {
   confirmationService,
-  // getPaymentInfoUser,
+  getPayments,
 };

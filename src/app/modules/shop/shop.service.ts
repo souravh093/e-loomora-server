@@ -52,6 +52,20 @@ const getShopByIdFromDB = async (id: string) => {
   return result;
 };
 
+const getShopByUserId = async (userId: string) => {
+  const result = await prisma.shop.findFirst({
+    where: {
+      ownerId: userId,
+    },
+    include: {
+      owner: true,
+      product: true,
+    }
+  });
+
+  return result;
+}
+
 const getShopsFromDB = async (query: Record<string, any>) => {
   const shopQuery = buildPrismaQuery({
     searchFields: ['name'],
@@ -91,4 +105,5 @@ export const ShopServices = {
     deleteShopFromDB,
     getShopByIdFromDB,
     getShopsFromDB,
+    getShopByUserId,
 }

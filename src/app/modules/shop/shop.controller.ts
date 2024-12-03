@@ -45,6 +45,17 @@ const getShopById = catchAsync(async (req, res) => {
   });
 });
 
+const getShopByUserId = catchAsync(async (req, res) => {
+  const result = await ShopServices.getShopByUserId(req.params.id);
+
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: 'Shop fetched by User successfully',
+    data: result,
+  });
+});
+
 const getShops = catchAsync(async (req, res) => {
   const { result, meta } = await ShopServices.getShopsFromDB(req.query);
 
@@ -63,4 +74,5 @@ export const ShopController = {
   deleteShop,
   getShopById,
   getShops,
+  getShopByUserId,
 };

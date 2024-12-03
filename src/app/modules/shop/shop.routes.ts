@@ -27,5 +27,6 @@ router.delete(
 
 router.get('/', ShopController.getShops);
 router.get('/:id', ShopController.getShopById);
+router.get('/user/:id', ShopController.getShopByUserId);
 
 export const ShopRoutes = router;

@@ -7,8 +7,8 @@ const createProductIntoDB = async (payload: any) => {
     data: {
       ...payload,
       productImage: {
-        create: payload.productImage.map((image: { url: string }) => ({
-          url: image.url,
+        create: payload.productImage.map((image: string) => ({
+          url: image,
         })),
       },
     },
@@ -55,6 +55,7 @@ const getProducts = async (query: Record<string, any>) => {
     include: {
       productImage: true,
       review: true,
+      category: true,
     },
   });
 
