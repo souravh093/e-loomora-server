@@ -1,4 +1,4 @@
-import { Product } from '@prisma/client';
+import { Product, ProductImage } from '@prisma/client';
 import prisma from '../../../db/db.config';
 import { buildPrismaQuery } from '../../builder/prismaBuilderQuery';
 
@@ -28,6 +28,7 @@ const getProductById = async (id: string) => {
     include: {
       productImage: true,
       review: true,
+      category: true,
     },
   });
 
@@ -100,10 +101,36 @@ const deleteProductFromDB = async (id: string) => {
   });
 };
 
+const deleteProductImageFromDB = async (id: string) => {
+  await prisma.productImage.findUniqueOrThrow({
+    where: {
+      id,
+    },
+  });
+
+  await prisma.productImage.delete({
+    where: {
+      id,
+    },
+  });
+
+  return 'Image deleted successfully';
+};
+
+const createProductImageIntoDB = async (payload: ProductImage) => {
+  const result = await prisma.productImage.create({
+    data: payload,
+  });
+
+  return result;
+};
+
 export const ProductService = {
   createProductIntoDB,
   getProductById,
   getProducts,
   updateProductInDB,
   deleteProductFromDB,
+  deleteProductImageFromDB,
+  createProductImageIntoDB,
 };

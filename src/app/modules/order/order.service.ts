@@ -2,8 +2,10 @@ import { OrderStatus, PaymentStatus } from '@prisma/client';
 import prisma from '../../../db/db.config';
 import { initiatePayment } from '../payment/payment.utils';
 import { TOrder } from '../../types/orderTypes';
+import { buildPrismaQuery } from '../../builder/prismaBuilderQuery';
 
 const createOrderIntoDB = async (payload: TOrder) => {
+
   const result = await prisma.$transaction(async (prisma) => {
     const { userId, shopId, totalAmount, orderItem, shippingAddress } = payload;
 
@@ -23,8 +25,12 @@ const createOrderIntoDB = async (payload: TOrder) => {
       },
     });
 
+    
     await prisma.shippingAddress.create({
-      data: shippingAddress,
+      data: {
+        ...shippingAddress,
+        orderId: order.id,
+      },
     });
 
     const transactionId = `TXN-${Date.now()}${Math.floor(10000 + Math.random()) * 90000}`;
@@ -64,6 +70,42 @@ const createOrderIntoDB = async (payload: TOrder) => {
   return result;
 };
 
+const getOrdersFromDB = async (query: Record<string, any>) => {
+  const orderQuery = buildPrismaQuery({
+    searchFields: ['status'],
+    searchTerm: query.searchTerm,
+    filter: query.filter && JSON.parse(query.filter),
+    orderBy: query.orderBy && JSON.parse(query.orderBy),
+    page: query.page,
+    limit: query.limit,
+  });
+
+  const totalOrders = await prisma.order.count({
+    where: orderQuery.where,
+  });
+
+  const totalPages = Math.ceil(totalOrders / orderQuery.take);
+
+  const result = await prisma.order.findMany({
+    ...orderQuery,
+    include: {
+      orderItem: true,
+      user: true,
+      shop: true,
+    },
+  });
+
+  return {
+    meta: {
+      total: totalOrders,
+      limit: orderQuery.take,
+      page: totalPages,
+    },
+    result,
+  };
+};
+
 export const OrderService = {
   createOrderIntoDB,
+  getOrdersFromDB,
 };

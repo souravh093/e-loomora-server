@@ -14,6 +14,12 @@ router.post(
   ReviewController.createReview,
 );
 
+router.get(
+  '/:shopId',
+  auth(Role.ADMIN, Role.VENDOR),
+  ReviewController.getReviews,
+);
+
 router.put(
   '/:id',
   auth(Role.USER, Role.ADMIN, Role.VENDOR),

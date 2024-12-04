@@ -14,6 +14,12 @@ router.post(
   ProductController.createProduct,
 );
 
+router.post(
+  '/product-image',
+  auth(Role.ADMIN, Role.VENDOR),
+  ProductController.createProductImage,
+);
+
 router.get('/', ProductController.getProducts);
 router.get('/:id', ProductController.getProductById);
 
@@ -28,6 +34,12 @@ router.delete(
   '/:id',
   auth(Role.ADMIN, Role.VENDOR),
   ProductController.deleteProduct,
+);
+
+router.delete(
+  '/product-image/:id',
+  auth(Role.ADMIN, Role.VENDOR),
+  ProductController.deleteProductImage,
 );
 
 export const ProductRoutes = router;

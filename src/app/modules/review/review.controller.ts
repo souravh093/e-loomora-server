@@ -13,6 +13,16 @@ const createReview = catchAsync(async (req, res) => {
   });
 });
 
+const getReviews = catchAsync(async (req, res) => {
+  const result = await ReviewService.getReviews(req.params.shopId);
+
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    data: result,
+  });
+});
+
 const updateReview = catchAsync(async (req, res) => {
   const result = await ReviewService.updateReview(req.params.id, req.body);
 
@@ -38,4 +48,5 @@ export const ReviewController = {
   createReview,
   updateReview,
   deleteReview,
+  getReviews,
 };

@@ -57,10 +57,33 @@ const deleteProduct = catchAsync(async (req, res) => {
   });
 });
 
+const createProductImage = catchAsync(async (req, res) => {
+  const result = await ProductService.createProductImageIntoDB(req.body);
+
+  sendResponse(res, {
+    statusCode: 201,
+    success: true,
+    message: 'Product image created successfully',
+    data: result,
+  });
+});
+
+const deleteProductImage = catchAsync(async (req, res) => {
+  const result = await ProductService.deleteProductImageFromDB(req.params.id);
+
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: result,
+  });
+});
+
 export const ProductController = {
   createProduct,
   getProductById,
   getProducts,
   updateProduct,
   deleteProduct,
+  createProductImage,
+  deleteProductImage,
 };

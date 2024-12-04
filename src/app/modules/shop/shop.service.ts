@@ -47,6 +47,10 @@ const getShopByIdFromDB = async (id: string) => {
     where: {
       id,
     },
+    include: {
+      product: true,
+      owner: true,
+    }
   });
 
   return result;

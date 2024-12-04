@@ -9,9 +9,15 @@ const router = Router();
 
 router.post(
   '/',
-  auth(Role.USER),
+  // auth(Role.USER),
   validationRequest(OrderValidations.createOrderValidation),
   OrderController.createOrder,
+);
+
+router.get(
+  '/',
+  auth(Role.ADMIN, Role.VENDOR),
+  OrderController.getOrders,
 );
 
 export const OrderRoutes = router;
