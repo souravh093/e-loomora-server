@@ -106,7 +106,29 @@ const getOrdersFromDB = async (query: Record<string, any>) => {
   };
 };
 
+
+const getOrderByIdFromDB = async (id: string) => {
+  const result = await prisma.order.findUniqueOrThrow({
+    where: {
+      id,
+    },
+    include: {
+      orderItem: {
+        include: {
+          product: true,
+        }
+      },
+      user: true,
+      shop: true,
+      shippingAddress: true,
+    },
+  })
+
+  return result;
+}
+
 export const OrderService = {
   createOrderIntoDB,
   getOrdersFromDB,
+  getOrderByIdFromDB,
 };

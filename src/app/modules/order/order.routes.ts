@@ -9,15 +9,21 @@ const router = Router();
 
 router.post(
   '/',
-  auth(Role.USER),
+  // auth(Role.USER), // TODO
   validationRequest(OrderValidations.createOrderValidation),
   OrderController.createOrder,
 );
 
 router.get(
   '/',
-  // auth(Role.ADMIN, Role.VENDOR),
+  auth(Role.ADMIN, Role.VENDOR, Role.USER),
   OrderController.getOrders,
+);
+
+router.get(
+  '/:id',
+  auth(Role.ADMIN, Role.VENDOR),
+  OrderController.getOrderById,
 );
 
 export const OrderRoutes = router;

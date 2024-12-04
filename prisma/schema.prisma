@@ -120,7 +120,7 @@ model ShippingAddress {
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId    String
   order     Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
-  orderId   String   @unique
+  orderId   String   @unique @default("dfjldsjfldsjfldsjlkjd")
   address   String
   phone     String
   city      String
