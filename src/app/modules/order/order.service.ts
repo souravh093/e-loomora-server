@@ -92,6 +92,7 @@ const getOrdersFromDB = async (query: Record<string, any>) => {
       orderItem: true,
       user: true,
       shop: true,
+      shippingAddress: true,
     },
   });
 
