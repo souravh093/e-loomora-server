@@ -22,11 +22,11 @@ app.use(
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.json());
-app.use(express.static('public'));
+
 
 app.get('/', (req: Request, res: Response) => {
   return res.json({
-    message: 'Mukim server is  running 🏃‍♀️‍➡️🏃‍♀️‍➡️🏃‍♀️‍➡️',
+    message: 'Loomora server is  running 🏃‍♀️‍➡️🏃‍♀️‍➡️🏃‍♀️‍➡️',
   });
 });
 
@@ -38,5 +38,5 @@ app.use(globalErrorHandler);
 
 app.listen(config.port, () => {
   seedAdminUser();
-  console.log(`MUKIM Server is listening on port:${config.port} 😎`);
+  console.log(`Loomora Server is listening on port:${config.port} 😎`);
 });

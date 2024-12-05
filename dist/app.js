@@ -23,10 +23,9 @@ app.use((0, cors_1.default)({
 app.use(body_parser_1.default.json());
 app.use(body_parser_1.default.urlencoded({ extended: true }));
 app.use(express_1.default.json());
-app.use(express_1.default.static('public'));
 app.get('/', (req, res) => {
     return res.json({
-        message: 'Mukim server is  running 🏃‍♀️‍➡️🏃‍♀️‍➡️🏃‍♀️‍➡️',
+        message: 'Loomora server is  running 🏃‍♀️‍➡️🏃‍♀️‍➡️🏃‍♀️‍➡️',
     });
 });
 // routes
@@ -35,5 +34,5 @@ app.use(notFoundRoutes_1.default);
 app.use(golobalErrorHandler_1.globalErrorHandler);
 app.listen(config_1.default.port, () => {
     (0, db_config_1.seedAdminUser)();
-    console.log(`MUKIM Server is listening on port:${config_1.default.port} 😎`);
+    console.log(`Loomora Server is listening on port:${config_1.default.port} 😎`);
 });
