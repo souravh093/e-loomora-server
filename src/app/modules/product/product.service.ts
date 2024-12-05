@@ -29,6 +29,7 @@ const getProductById = async (id: string) => {
       productImage: true,
       review: true,
       category: true,
+      shop: true,
     },
   });
 
@@ -57,6 +58,7 @@ const getProducts = async (query: Record<string, any>) => {
       productImage: true,
       review: true,
       category: true,
+      shop: true,
     },
   });
 

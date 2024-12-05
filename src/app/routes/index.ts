@@ -8,6 +8,7 @@ import { ReviewRoutes } from '../modules/review/review.routes';
 import { CouponRoutes } from '../modules/coupon/coupon.routes';
 import { OrderRoutes } from '../modules/order/order.routes';
 import { paymentRoutes } from '../modules/payment/payment.route';
+import { ShopFollowRoutes } from '../modules/shopFollow/shopFollow.routes';
 
 const router = Router();
 
@@ -45,9 +46,13 @@ const moduleRoutes = [
     route: OrderRoutes,
   },
   {
-    path: "/payments",
+    path: '/payments',
     route: paymentRoutes,
-  }
+  },
+  {
+    path: '/follows-shops',
+    route: ShopFollowRoutes,
+  },
 ];
 
 moduleRoutes.forEach((route) => router.use(route.path, route.route));

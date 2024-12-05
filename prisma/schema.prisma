@@ -51,6 +51,7 @@ model User {
   order           Order[]
   review          Review[]
   shippingAddress ShippingAddress[]
+  shopFollow      ShopFollow[]
 }
 
 model Shop {
@@ -58,14 +59,24 @@ model Shop {
   name        String
   logoUrl     String?    @db.Text
   description String?    @db.Text
+  follower    Int        @default(0)
   status      ShopStatus @default(ACTIVE)
   owner       User       @relation(fields: [ownerId], references: [id], onDelete: Cascade)
   ownerId     String     @unique
   createdAt   DateTime   @default(now())
   updatedAt   DateTime   @updatedAt
 
-  product Product[]
-  order   Order[]
+  product    Product[]
+  order      Order[]
+  shopFollow ShopFollow[]
+}
+
+model ShopFollow {
+  id     String @id @default(uuid())
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String
+  shop   Shop   @relation(fields: [shopId], references: [id], onDelete: Cascade)
+  shopId String
 }
 
 model Category {
@@ -120,7 +131,7 @@ model ShippingAddress {
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId    String
   order     Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
-  orderId   String   @unique @default("dfjldsjfldsjfldsjlkjd")
+  orderId   String   @unique
   address   String
   phone     String
   city      String
