@@ -2,10 +2,10 @@ import { User } from '@prisma/client';
 import prisma from '../../../db/db.config';
 import bcrypt from 'bcryptjs';
 import AppError from '../../errors/AppError';
-import { createToke } from '../../modules_old/auth/auth.utils';
 import config from '../../config';
 import jwt, { JwtPayload } from 'jsonwebtoken';
 import { sendEmail } from '../../utils/sendEmail';
+import { createToke } from './auth.utils';
 
 const loginUserFromDB = async (payload: User) => {
   const userExists = await prisma.user.findUniqueOrThrow({

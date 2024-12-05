@@ -1,0 +1,20 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.UsersRoutes = void 0;
+const express_1 = require("express");
+const validationRequest_1 = __importDefault(require("../../middlewares/validationRequest"));
+const user_validation_1 = require("./user.validation");
+const users_controller_1 = require("./users.controller");
+const auth_1 = __importDefault(require("../../middlewares/auth"));
+const client_1 = require("@prisma/client");
+const router = (0, express_1.Router)();
+router.post('/customer', (0, validationRequest_1.default)(user_validation_1.UserValidations.createUserValidationSchema), users_controller_1.UsersController.createUser);
+router.post('/vendor', (0, validationRequest_1.default)(user_validation_1.UserValidations.createUserValidationSchema), users_controller_1.UsersController.createVendor);
+router.get('/', (0, auth_1.default)(client_1.Role.ADMIN), users_controller_1.UsersController.getUsers);
+router.get('/:id', (0, auth_1.default)(client_1.Role.ADMIN), users_controller_1.UsersController.getUserById);
+router.put('/:id', (0, auth_1.default)(client_1.Role.ADMIN), (0, validationRequest_1.default)(user_validation_1.UserValidations.updateUserValidationSchema), users_controller_1.UsersController.updateUserById);
+router.delete('/:id', (0, auth_1.default)(client_1.Role.ADMIN), users_controller_1.UsersController.deleteUserById);
+exports.UsersRoutes = router;
