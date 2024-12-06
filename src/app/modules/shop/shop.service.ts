@@ -48,8 +48,15 @@ const getShopByIdFromDB = async (id: string) => {
       id,
     },
     include: {
-      product: true,
       owner: true,
+      product: {
+        include: {
+          category: true,
+          productImage: true,
+          review: true,
+          shop: true,
+        }
+      },
     }
   });
 
@@ -63,7 +70,14 @@ const getShopByUserId = async (userId: string) => {
     },
     include: {
       owner: true,
-      product: true,
+      product: {
+        include: {
+          category: true,
+          productImage: true,
+          review: true,
+          shop: true,
+        }
+      },
     }
   });
 

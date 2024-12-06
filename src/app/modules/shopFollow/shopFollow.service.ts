@@ -35,6 +35,8 @@ const unfollowShopFromDB = async (payload: ShopFollow) => {
   return 'Shop Unfollowed successfully';
 };
 
+
+
 const getShopFollowByUserId = async (userId: string) => {
   const result = await prisma.shopFollow.findMany({
     where: {
@@ -55,9 +57,29 @@ const getShopFollowByShopId = async (shopId: string) => {
   return result;
 };
 
+
+const checkShopFollow = async (query: Record<string, any>) => {
+  const result = await prisma.shopFollow.findFirst({
+    where: {
+      userId: query.userId,
+      shopId: query.shopId,
+    },
+  });
+
+  return result;
+};
+
+const getAllShopFollow = async () => {
+  const result = await prisma.shopFollow.findMany();
+
+  return result;
+};
+
 export const ShopFollowService = {
   followShopIntoDB,
   unfollowShopFromDB,
   getShopFollowByUserId,
   getShopFollowByShopId,
+  checkShopFollow,
+  getAllShopFollow,
 };

@@ -13,6 +13,17 @@ const followShop = catchAsync(async (req, res) => {
   });
 });
 
+const checkShopFollow = catchAsync(async (req, res) => {
+  const result = await ShopFollowService.checkShopFollow(req.query);
+
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: 'Shop Followed successfully',
+    data: result,
+  });
+});
+
 const unfollowShop = catchAsync(async (req, res) => {
   const result = await ShopFollowService.unfollowShopFromDB(req.body);
 
@@ -47,9 +58,22 @@ const getShopFollowByShopId = catchAsync(async (req, res) => {
   });
 });
 
+const getAllShopFollow = catchAsync(async (req, res) => {
+  const result = await ShopFollowService.getAllShopFollow();
+
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: 'All Shop Follows',
+    data: result,
+  });
+});
+
 export const ShopFollowController = {
   followShop,
   unfollowShop,
   getShopFollowByUserId,
   getShopFollowByShopId,
+  checkShopFollow,
+  getAllShopFollow,
 };
