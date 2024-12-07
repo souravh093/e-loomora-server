@@ -35,8 +35,6 @@ const unfollowShopFromDB = async (payload: ShopFollow) => {
   return 'Shop Unfollowed successfully';
 };
 
-
-
 const getShopFollowByUserId = async (userId: string) => {
   const result = await prisma.shopFollow.findMany({
     where: {

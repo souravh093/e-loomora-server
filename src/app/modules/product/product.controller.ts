@@ -33,6 +33,16 @@ const getProducts = catchAsync(async (req, res) => {
   });
 });
 
+const getPrioritizeProducts = catchAsync(async (req, res) => {
+  const result = await ProductService.getPrioritizeProduct(req.user);
+
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    data: result,
+  });
+});
+
 const updateProduct = catchAsync(async (req, res) => {
   const result = await ProductService.updateProductInDB(
     req.params.id,
@@ -86,4 +96,5 @@ export const ProductController = {
   deleteProduct,
   createProductImage,
   deleteProductImage,
+  getPrioritizeProducts,
 };

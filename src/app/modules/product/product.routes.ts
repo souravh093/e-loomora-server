@@ -21,6 +21,11 @@ router.post(
 );
 
 router.get('/', ProductController.getProducts);
+router.get(
+  '/prioritize',
+  auth(Role.USER),
+  ProductController.getPrioritizeProducts,
+);
 router.get('/:id', ProductController.getProductById);
 
 router.put(

@@ -8,11 +8,14 @@ const createOrderIntoDB = async (payload: TOrder) => {
   const result = await prisma.$transaction(async (prisma) => {
     const { userId, shopId, totalAmount, orderItem, shippingAddress } = payload;
 
+    const transactionId = `TXN-${Date.now()}${Math.floor(10000 + Math.random()) * 90000}`;
+
     const order = await prisma.order.create({
       data: {
         userId,
         shopId,
         totalAmount,
+        transactionId,
         status: OrderStatus.PENDING,
         orderItem: {
           create: orderItem.map((item) => ({
@@ -31,7 +34,7 @@ const createOrderIntoDB = async (payload: TOrder) => {
       },
     });
 
-    const transactionId = `TXN-${Date.now()}${Math.floor(10000 + Math.random()) * 90000}`;
+    
 
     const isExistUser = await prisma.user.findUniqueOrThrow({
       where: {

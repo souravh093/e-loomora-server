@@ -21,7 +21,29 @@ const confirmationService = async (
       const orderData = await prisma.order.findFirstOrThrow({
         where: {
           userId: userData.id,
+          transactionId,
         },
+        include: {
+          orderItem: true,
+        },
+      });
+    
+
+      await prisma.order.update({
+        where: {
+          id: orderData.id,
+          transactionId,
+        },
+        data: {
+          status: PaymentStatus.COMPLETED,
+        },
+      });
+
+      orderData?.orderItem.map(async (item) => {
+        prisma.product.update({
+          where: { id: item.productId },
+          data: { inventoryCount: { decrement: item.quantity } },
+        });
       });
 
       const paymentData = await prisma.payment.findFirstOrThrow({
@@ -33,14 +55,6 @@ const confirmationService = async (
       await prisma.payment.update({
         where: {
           id: paymentData.id,
-        },
-        data: {
-          status: PaymentStatus.COMPLETED,
-        },
-      });
-      await prisma.order.update({
-        where: {
-          id: orderData.id,
         },
         data: {
           status: PaymentStatus.COMPLETED,

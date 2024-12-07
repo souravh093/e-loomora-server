@@ -1,6 +1,7 @@
 import { Product, ProductImage } from '@prisma/client';
 import prisma from '../../../db/db.config';
 import { buildPrismaQuery } from '../../builder/prismaBuilderQuery';
+import { JwtPayload } from 'jsonwebtoken';
 
 const createProductIntoDB = async (payload: any) => {
   const result = await prisma.product.create({
@@ -72,6 +73,36 @@ const getProducts = async (query: Record<string, any>) => {
   };
 };
 
+const getPrioritizeProduct = async (loggedUser: JwtPayload) => {
+  const followedShop = await prisma.shopFollow.findMany({
+    where: {
+      userId: loggedUser.id,
+    },
+  });
+
+  // how to get prioritize product from followedShop
+  const result = await prisma.product.findMany({
+    where: {
+      shopId: {
+        in: followedShop.map((shop) => shop.shopId),
+      },
+    },
+    skip: 0,
+    take: 10,
+    orderBy: {
+      createdAt: 'desc',
+    },
+    include: {
+      productImage: true,
+      review: true,
+      category: true,
+      shop: true,
+    },
+  });
+
+  return result;
+};
+
 const updateProductInDB = async (id: string, payload: Product) => {
   await prisma.product.findUniqueOrThrow({
     where: {
@@ -135,4 +166,5 @@ export const ProductService = {
   deleteProductFromDB,
   deleteProductImageFromDB,
   createProductImageIntoDB,
+  getPrioritizeProduct,
 };
