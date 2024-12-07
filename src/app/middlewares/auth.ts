@@ -27,7 +27,6 @@ const auth = (...requiredRoles: string[]) => {
       },
     });
 
-
     if (requiredRoles && !requiredRoles.includes(role)) {
       return res.status(403).json({
         statusCode: 403,

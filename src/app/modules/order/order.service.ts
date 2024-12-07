@@ -5,7 +5,6 @@ import { TOrder } from '../../types/orderTypes';
 import { buildPrismaQuery } from '../../builder/prismaBuilderQuery';
 
 const createOrderIntoDB = async (payload: TOrder) => {
-
   const result = await prisma.$transaction(async (prisma) => {
     const { userId, shopId, totalAmount, orderItem, shippingAddress } = payload;
 
@@ -25,7 +24,6 @@ const createOrderIntoDB = async (payload: TOrder) => {
       },
     });
 
-    
     await prisma.shippingAddress.create({
       data: {
         ...shippingAddress,
@@ -106,7 +104,6 @@ const getOrdersFromDB = async (query: Record<string, any>) => {
   };
 };
 
-
 const getOrderByIdFromDB = async (id: string) => {
   const result = await prisma.order.findUniqueOrThrow({
     where: {
@@ -116,19 +113,35 @@ const getOrderByIdFromDB = async (id: string) => {
       orderItem: {
         include: {
           product: true,
-        }
+        },
       },
       user: true,
       shop: true,
       shippingAddress: true,
     },
-  })
+  });
 
   return result;
-}
+};
+
+const getOrderByUserIdFromDB = async (query: Record<string, any>) => {
+  const result = await prisma.order.findFirst({
+    where: {
+      userId: query.userId,
+      orderItem: {
+        some: {
+          productId: query.productId,
+        },
+      }
+    },
+  });
+
+  return result;
+};
 
 export const OrderService = {
   createOrderIntoDB,
   getOrdersFromDB,
   getOrderByIdFromDB,
+  getOrderByUserIdFromDB,
 };

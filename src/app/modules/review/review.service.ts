@@ -2,8 +2,49 @@ import { Review } from '@prisma/client';
 import prisma from '../../../db/db.config';
 
 const createReview = async (payload: Review) => {
-  const result = await prisma.review.create({
-    data: payload,
+  const result = await prisma.$transaction(async (prisma) => {
+    const review = await prisma.review.create({
+      data: payload,
+    });
+
+    const product = await prisma.product.findUniqueOrThrow({
+      where: {
+        id: payload.productId,
+      },
+    });
+
+    const isExistUserReview = await prisma.review.findFirst({
+      where: {
+        productId: payload.productId,
+        userId: payload.userId,
+      }
+    })
+
+    if (isExistUserReview) {
+      throw new Error('You have already reviewed this product');
+    }
+
+    if (product.avgRating !== 0) {
+      await prisma.product.update({
+        where: {
+          id: payload.productId,
+        },
+        data: {
+          avgRating: product.avgRating + payload.rating / 2,
+        },
+      });
+    } else if (product.avgRating === 0) {
+      await prisma.product.update({
+        where: {
+          id: payload.productId,
+        },
+        data: {
+          avgRating: payload.rating,
+        },
+      });
+    }
+
+    return review;
   });
 
   return result;

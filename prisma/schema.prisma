@@ -94,6 +94,7 @@ model Product {
   price          Float
   discount       Float?   @default(0)
   inventoryCount Int
+  avgRating      Float    @default(0)
   category       Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
   categoryId     String
   shop           Shop     @relation(fields: [shopId], references: [id], onDelete: Cascade)
