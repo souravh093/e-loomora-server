@@ -190,9 +190,9 @@ model Review {
 }
 
 model Coupon {
-  id         String   @id @default(uuid())
-  code       String   @unique
+  id         String    @id @default(uuid())
+  code       String    @unique
   discount   Float
-  expiryDate DateTime
-  createdAt  DateTime @default(now())
+  expiryDate DateTime?
+  createdAt  DateTime  @default(now())
 }

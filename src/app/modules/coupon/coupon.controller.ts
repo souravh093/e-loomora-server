@@ -2,12 +2,32 @@ import { Coupon } from '@prisma/client';
 import prisma from '../../../db/db.config';
 
 const createCouponIntoDB = async (payload: Coupon) => {
+  const isExistCouponCode = await prisma.coupon.findFirst({
+    where: {
+      code: payload.code,
+    },
+  });
+
+  if (isExistCouponCode) {
+    throw new Error('Coupon code already exists');
+  }
+
   const result = await prisma.coupon.create({
     data: payload,
   });
 
   return result;
 };
+
+const checkCouponCode = async (code: string) => {
+  const result = await prisma.coupon.findFirstOrThrow({
+    where: {
+      code,
+    },
+  });
+
+  return result;
+}
 
 const getCouponById = async (id: string) => {
   const result = await prisma.coupon.findUniqueOrThrow({
@@ -62,4 +82,5 @@ export const CouponService = {
   getAllCoupons,
   updateCouponById,
   deleteCouponById,
+  checkCouponCode,
 };

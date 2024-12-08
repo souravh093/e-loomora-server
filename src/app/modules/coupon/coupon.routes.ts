@@ -17,6 +17,7 @@ router.post(
 router.get('/', CouponController.getAllCoupons);
 
 router.get('/:id', CouponController.getCouponById);
+router.get('/check/:code', CouponController.checkCouponCode);
 
 router.put(
   '/:id',

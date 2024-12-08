@@ -28,7 +28,7 @@ router.get(
 
 router.get(
   '/:id',
-  auth(Role.ADMIN, Role.VENDOR),
+  auth(Role.ADMIN, Role.VENDOR, Role.USER),
   OrderController.getOrderById,
 );
 
