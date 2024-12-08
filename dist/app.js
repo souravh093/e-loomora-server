@@ -11,7 +11,6 @@ const routes_1 = __importDefault(require("./app/routes"));
 const golobalErrorHandler_1 = require("./app/middlewares/golobalErrorHandler");
 const body_parser_1 = __importDefault(require("body-parser"));
 const db_config_1 = require("./db/db.config");
-// import { seedAdminUser } from './db/db.config';
 const app = (0, express_1.default)();
 // middlewares
 app.use((0, cors_1.default)({

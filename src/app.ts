@@ -6,7 +6,6 @@ import router from './app/routes';
 import { globalErrorHandler } from './app/middlewares/golobalErrorHandler';
 import bodyParser from 'body-parser';
 import { seedAdminUser } from './db/db.config';
-// import { seedAdminUser } from './db/db.config';
 
 const app: Application = express();
 
