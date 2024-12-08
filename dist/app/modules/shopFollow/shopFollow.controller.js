@@ -25,6 +25,15 @@ const followShop = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, voi
         data: result,
     });
 }));
+const checkShopFollow = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield shopFollow_service_1.ShopFollowService.checkShopFollow(req.query);
+    (0, sendResponse_1.default)(res, {
+        statusCode: 200,
+        success: true,
+        message: 'Shop Followed successfully',
+        data: result,
+    });
+}));
 const unfollowShop = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield shopFollow_service_1.ShopFollowService.unfollowShopFromDB(req.body);
     (0, sendResponse_1.default)(res, {
@@ -49,9 +58,20 @@ const getShopFollowByShopId = (0, catchAsync_1.default)((req, res) => __awaiter(
         data: result,
     });
 }));
+const getAllShopFollow = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield shopFollow_service_1.ShopFollowService.getAllShopFollow();
+    (0, sendResponse_1.default)(res, {
+        statusCode: 200,
+        success: true,
+        message: 'All Shop Follows',
+        data: result,
+    });
+}));
 exports.ShopFollowController = {
     followShop,
     unfollowShop,
     getShopFollowByUserId,
     getShopFollowByShopId,
+    checkShopFollow,
+    getAllShopFollow,
 };

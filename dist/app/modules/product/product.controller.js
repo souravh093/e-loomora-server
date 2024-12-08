@@ -41,6 +41,14 @@ const getProducts = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, vo
         data: result,
     });
 }));
+const getPrioritizeProducts = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield product_service_1.ProductService.getPrioritizeProduct(req.user);
+    (0, sendResponse_1.default)(res, {
+        statusCode: 200,
+        success: true,
+        data: result,
+    });
+}));
 const updateProduct = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield product_service_1.ProductService.updateProductInDB(req.params.id, req.body);
     (0, sendResponse_1.default)(res, {
@@ -83,4 +91,5 @@ exports.ProductController = {
     deleteProduct,
     createProductImage,
     deleteProductImage,
+    getPrioritizeProducts,
 };

@@ -7,7 +7,6 @@ const createShopFollowIntoDB = z.object({
   }),
 });
 
-
 export const ShopFollowValidations = {
   createShopFollowIntoDB,
 };

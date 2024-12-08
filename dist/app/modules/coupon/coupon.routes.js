@@ -14,6 +14,7 @@ const router = (0, express_1.Router)();
 router.post('/', (0, auth_1.default)(client_1.Role.ADMIN, client_1.Role.VENDOR), (0, validationRequest_1.default)(coupon_validation_1.CouponValidation.createCouponValidation), coupon_service_1.CouponController.createCoupon);
 router.get('/', coupon_service_1.CouponController.getAllCoupons);
 router.get('/:id', coupon_service_1.CouponController.getCouponById);
+router.get('/check/:code', coupon_service_1.CouponController.checkCouponCode);
 router.put('/:id', (0, auth_1.default)(client_1.Role.ADMIN, client_1.Role.VENDOR), coupon_service_1.CouponController.updateCouponById);
 router.delete('/:id', (0, auth_1.default)(client_1.Role.ADMIN, client_1.Role.VENDOR), coupon_service_1.CouponController.deleteCouponById);
 exports.CouponRoutes = router;

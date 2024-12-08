@@ -27,7 +27,7 @@ const checkCouponCode = async (code: string) => {
   });
 
   return result;
-}
+};
 
 const getCouponById = async (id: string) => {
   const result = await prisma.coupon.findUniqueOrThrow({

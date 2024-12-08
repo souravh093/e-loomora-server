@@ -88,7 +88,7 @@ const deleteUserByIdFromDB = (id) => __awaiter(void 0, void 0, void 0, function*
             id,
         },
     });
-    return "User deleted successfully";
+    return 'User deleted successfully';
 });
 exports.UserServices = {
     createUserIntoDB,

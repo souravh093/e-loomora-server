@@ -20,11 +20,13 @@ const prismaBuilderQuery_1 = require("../../builder/prismaBuilderQuery");
 const createOrderIntoDB = (payload) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield db_config_1.default.$transaction((prisma) => __awaiter(void 0, void 0, void 0, function* () {
         const { userId, shopId, totalAmount, orderItem, shippingAddress } = payload;
+        const transactionId = `TXN-${Date.now()}${Math.floor(10000 + Math.random()) * 90000}`;
         const order = yield prisma.order.create({
             data: {
                 userId,
                 shopId,
                 totalAmount,
+                transactionId,
                 status: client_1.OrderStatus.PENDING,
                 orderItem: {
                     create: orderItem.map((item) => ({
@@ -38,7 +40,6 @@ const createOrderIntoDB = (payload) => __awaiter(void 0, void 0, void 0, functio
         yield prisma.shippingAddress.create({
             data: Object.assign(Object.assign({}, shippingAddress), { orderId: order.id }),
         });
-        const transactionId = `TXN-${Date.now()}${Math.floor(10000 + Math.random()) * 90000}`;
         const isExistUser = yield prisma.user.findUniqueOrThrow({
             where: {
                 id: userId,
@@ -105,7 +106,7 @@ const getOrderByIdFromDB = (id) => __awaiter(void 0, void 0, void 0, function* (
             orderItem: {
                 include: {
                     product: true,
-                }
+                },
             },
             user: true,
             shop: true,
@@ -114,8 +115,22 @@ const getOrderByIdFromDB = (id) => __awaiter(void 0, void 0, void 0, function* (
     });
     return result;
 });
+const getOrderByUserIdFromDB = (query) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield db_config_1.default.order.findFirst({
+        where: {
+            userId: query.userId,
+            orderItem: {
+                some: {
+                    productId: query.productId,
+                },
+            },
+        },
+    });
+    return result;
+});
 exports.OrderService = {
     createOrderIntoDB,
     getOrdersFromDB,
     getOrderByIdFromDB,
+    getOrderByUserIdFromDB,
 };

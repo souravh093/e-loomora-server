@@ -15,9 +15,46 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.ReviewService = void 0;
 const db_config_1 = __importDefault(require("../../../db/db.config"));
 const createReview = (payload) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield db_config_1.default.review.create({
-        data: payload,
-    });
+    const result = yield db_config_1.default.$transaction((prisma) => __awaiter(void 0, void 0, void 0, function* () {
+        const review = yield prisma.review.create({
+            data: payload,
+        });
+        const product = yield prisma.product.findUniqueOrThrow({
+            where: {
+                id: payload.productId,
+            },
+        });
+        const isExistUserReview = yield prisma.review.findFirst({
+            where: {
+                productId: payload.productId,
+                userId: payload.userId,
+            },
+        });
+        if (isExistUserReview) {
+            throw new Error('You have already reviewed this product');
+        }
+        if (product.avgRating !== 0) {
+            yield prisma.product.update({
+                where: {
+                    id: payload.productId,
+                },
+                data: {
+                    avgRating: product.avgRating + payload.rating / 2,
+                },
+            });
+        }
+        else if (product.avgRating === 0) {
+            yield prisma.product.update({
+                where: {
+                    id: payload.productId,
+                },
+                data: {
+                    avgRating: payload.rating,
+                },
+            });
+        }
+        return review;
+    }));
     return result;
 });
 const getReviews = (shopId) => __awaiter(void 0, void 0, void 0, function* () {

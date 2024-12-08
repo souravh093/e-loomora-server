@@ -70,6 +70,33 @@ const getProducts = (query) => __awaiter(void 0, void 0, void 0, function* () {
         result,
     };
 });
+const getPrioritizeProduct = (loggedUser) => __awaiter(void 0, void 0, void 0, function* () {
+    const followedShop = yield db_config_1.default.shopFollow.findMany({
+        where: {
+            userId: loggedUser.id,
+        },
+    });
+    // how to get prioritize product from followedShop
+    const result = yield db_config_1.default.product.findMany({
+        where: {
+            shopId: {
+                in: followedShop.map((shop) => shop.shopId),
+            },
+        },
+        skip: 0,
+        take: 10,
+        orderBy: {
+            createdAt: 'desc',
+        },
+        include: {
+            productImage: true,
+            review: true,
+            category: true,
+            shop: true,
+        },
+    });
+    return result;
+});
 const updateProductInDB = (id, payload) => __awaiter(void 0, void 0, void 0, function* () {
     yield db_config_1.default.product.findUniqueOrThrow({
         where: {
@@ -123,4 +150,5 @@ exports.ProductService = {
     deleteProductFromDB,
     deleteProductImageFromDB,
     createProductImageIntoDB,
+    getPrioritizeProduct,
 };

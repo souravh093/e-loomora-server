@@ -1,6 +1,6 @@
 export const buildPrismaQuery = <TWhereInput, TOrderByInput>({
   searchFields = [],
-  searchTerm = "",
+  searchTerm = '',
   filter = {} as TWhereInput,
   orderBy = {} as TOrderByInput,
   page = 1,
@@ -22,7 +22,7 @@ export const buildPrismaQuery = <TWhereInput, TOrderByInput>({
           OR: searchFields.map((field) => ({
             [field]: {
               contains: searchTerm,
-              mode: "insensitive",
+              mode: 'insensitive',
             },
           })),
         }

@@ -14,7 +14,7 @@ const createOrder = catchAsync(async (req, res) => {
 });
 
 const getOrders = catchAsync(async (req, res) => {
-  const {result, meta} = await OrderService.getOrdersFromDB(req.query);
+  const { result, meta } = await OrderService.getOrdersFromDB(req.query);
 
   sendResponse(res, {
     statusCode: 200,
@@ -22,7 +22,7 @@ const getOrders = catchAsync(async (req, res) => {
     meta,
     data: result,
   });
-})
+});
 
 const getOrderById = catchAsync(async (req, res) => {
   const result = await OrderService.getOrderByIdFromDB(req.params.id);

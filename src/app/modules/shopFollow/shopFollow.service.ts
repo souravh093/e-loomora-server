@@ -55,7 +55,6 @@ const getShopFollowByShopId = async (shopId: string) => {
   return result;
 };
 
-
 const checkShopFollow = async (query: Record<string, any>) => {
   const result = await prisma.shopFollow.findFirst({
     where: {

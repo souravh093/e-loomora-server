@@ -6,7 +6,7 @@ const createCouponValidation = zod_1.z.object({
     body: zod_1.z.object({
         code: zod_1.z.string().min(1).max(255),
         discount: zod_1.z.number().min(0).max(100),
-        expiryDate: zod_1.z.string(),
+        expiryDate: zod_1.z.string().optional(),
     }),
 });
 exports.CouponValidation = {

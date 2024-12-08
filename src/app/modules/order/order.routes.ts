@@ -14,11 +14,7 @@ router.post(
   OrderController.createOrder,
 );
 
-router.get(
-  '/user',
-  auth(Role.USER),
-  OrderController.getOrderByUserId,
-);
+router.get('/user', auth(Role.USER), OrderController.getOrderByUserId);
 
 router.get(
   '/',
@@ -31,7 +27,5 @@ router.get(
   auth(Role.ADMIN, Role.VENDOR, Role.USER),
   OrderController.getOrderById,
 );
-
-
 
 export const OrderRoutes = router;

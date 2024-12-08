@@ -27,7 +27,6 @@ const confirmationService = async (
           orderItem: true,
         },
       });
-    
 
       await prisma.order.update({
         where: {

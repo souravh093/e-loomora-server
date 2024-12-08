@@ -7,8 +7,6 @@ import { Role } from '@prisma/client';
 
 const router = Router();
 
-
-
 router.post(
   '/',
   auth(Role.USER),
@@ -16,11 +14,7 @@ router.post(
   ShopFollowController.followShop,
 );
 
-router.get(
-  '/check',
-  auth(Role.USER),
-  ShopFollowController.checkShopFollow,
-);
+router.get('/check', auth(Role.USER), ShopFollowController.checkShopFollow);
 
 router.get(
   '/',

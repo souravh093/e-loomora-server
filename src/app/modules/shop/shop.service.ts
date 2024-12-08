@@ -55,9 +55,9 @@ const getShopByIdFromDB = async (id: string) => {
           productImage: true,
           review: true,
           shop: true,
-        }
+        },
       },
-    }
+    },
   });
 
   return result;
@@ -76,13 +76,13 @@ const getShopByUserId = async (userId: string) => {
           productImage: true,
           review: true,
           shop: true,
-        }
+        },
       },
-    }
+    },
   });
 
   return result;
-}
+};
 
 const getShopsFromDB = async (query: Record<string, any>) => {
   const shopQuery = buildPrismaQuery({
@@ -104,7 +104,7 @@ const getShopsFromDB = async (query: Record<string, any>) => {
     ...shopQuery,
     include: {
       owner: true,
-    }
+    },
   });
 
   return {
@@ -118,10 +118,10 @@ const getShopsFromDB = async (query: Record<string, any>) => {
 };
 
 export const ShopServices = {
-    createShopIntoDB,
-    updateShopIntoDB,
-    deleteShopFromDB,
-    getShopByIdFromDB,
-    getShopsFromDB,
-    getShopByUserId,
-}
+  createShopIntoDB,
+  updateShopIntoDB,
+  deleteShopFromDB,
+  getShopByIdFromDB,
+  getShopsFromDB,
+  getShopByUserId,
+};

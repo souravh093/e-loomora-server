@@ -34,8 +34,6 @@ const createOrderIntoDB = async (payload: TOrder) => {
       },
     });
 
-    
-
     const isExistUser = await prisma.user.findUniqueOrThrow({
       where: {
         id: userId,
@@ -135,7 +133,7 @@ const getOrderByUserIdFromDB = async (query: Record<string, any>) => {
         some: {
           productId: query.productId,
         },
-      }
+      },
     },
   });
 

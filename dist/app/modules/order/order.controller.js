@@ -43,8 +43,18 @@ const getOrderById = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, v
         data: result,
     });
 }));
+const getOrderByUserId = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield order_service_1.OrderService.getOrderByUserIdFromDB(req.query);
+    (0, sendResponse_1.default)(res, {
+        statusCode: 200,
+        success: true,
+        message: 'Order fetched successfully',
+        data: result,
+    });
+}));
 exports.OrderController = {
     createOrder,
     getOrders,
     getOrderById,
+    getOrderByUserId,
 };

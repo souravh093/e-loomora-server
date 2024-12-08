@@ -34,6 +34,15 @@ const getCouponById = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, 
         data: result,
     });
 }));
+const checkCouponCode = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield coupon_controller_1.CouponService.checkCouponCode(req.params.code);
+    (0, sendResponse_1.default)(res, {
+        statusCode: 200,
+        success: true,
+        message: 'Coupon check successfully',
+        data: result,
+    });
+}));
 const getAllCoupons = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield coupon_controller_1.CouponService.getAllCoupons();
     (0, sendResponse_1.default)(res, {
@@ -67,4 +76,5 @@ exports.CouponController = {
     getAllCoupons,
     updateCouponById,
     deleteCouponById,
+    checkCouponCode,
 };

@@ -29,8 +29,27 @@ const confirmationService = (transactionId, status, email) => __awaiter(void 0, 
             const orderData = yield prisma.order.findFirstOrThrow({
                 where: {
                     userId: userData.id,
+                    transactionId,
+                },
+                include: {
+                    orderItem: true,
                 },
             });
+            yield prisma.order.update({
+                where: {
+                    id: orderData.id,
+                    transactionId,
+                },
+                data: {
+                    status: client_1.PaymentStatus.COMPLETED,
+                },
+            });
+            orderData === null || orderData === void 0 ? void 0 : orderData.orderItem.map((item) => __awaiter(void 0, void 0, void 0, function* () {
+                prisma.product.update({
+                    where: { id: item.productId },
+                    data: { inventoryCount: { decrement: item.quantity } },
+                });
+            }));
             const paymentData = yield prisma.payment.findFirstOrThrow({
                 where: {
                     transactionId: transactionId,
@@ -39,14 +58,6 @@ const confirmationService = (transactionId, status, email) => __awaiter(void 0, 
             yield prisma.payment.update({
                 where: {
                     id: paymentData.id,
-                },
-                data: {
-                    status: client_1.PaymentStatus.COMPLETED,
-                },
-            });
-            yield prisma.order.update({
-                where: {
-                    id: orderData.id,
                 },
                 data: {
                     status: client_1.PaymentStatus.COMPLETED,

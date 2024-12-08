@@ -17,8 +17,8 @@ const createReview = async (payload: Review) => {
       where: {
         productId: payload.productId,
         userId: payload.userId,
-      }
-    })
+      },
+    });
 
     if (isExistUserReview) {
       throw new Error('You have already reviewed this product');

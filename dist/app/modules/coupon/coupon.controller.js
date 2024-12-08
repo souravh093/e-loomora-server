@@ -15,8 +15,24 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.CouponService = void 0;
 const db_config_1 = __importDefault(require("../../../db/db.config"));
 const createCouponIntoDB = (payload) => __awaiter(void 0, void 0, void 0, function* () {
+    const isExistCouponCode = yield db_config_1.default.coupon.findFirst({
+        where: {
+            code: payload.code,
+        },
+    });
+    if (isExistCouponCode) {
+        throw new Error('Coupon code already exists');
+    }
     const result = yield db_config_1.default.coupon.create({
         data: payload,
+    });
+    return result;
+});
+const checkCouponCode = (code) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield db_config_1.default.coupon.findFirstOrThrow({
+        where: {
+            code,
+        },
     });
     return result;
 });
@@ -65,4 +81,5 @@ exports.CouponService = {
     getAllCoupons,
     updateCouponById,
     deleteCouponById,
+    checkCouponCode,
 };

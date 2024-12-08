@@ -58,9 +58,24 @@ const getShopFollowByShopId = (shopId) => __awaiter(void 0, void 0, void 0, func
     });
     return result;
 });
+const checkShopFollow = (query) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield db_config_1.default.shopFollow.findFirst({
+        where: {
+            userId: query.userId,
+            shopId: query.shopId,
+        },
+    });
+    return result;
+});
+const getAllShopFollow = () => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield db_config_1.default.shopFollow.findMany();
+    return result;
+});
 exports.ShopFollowService = {
     followShopIntoDB,
     unfollowShopFromDB,
     getShopFollowByUserId,
     getShopFollowByShopId,
+    checkShopFollow,
+    getAllShopFollow,
 };

@@ -53,9 +53,16 @@ const getShopByIdFromDB = (id) => __awaiter(void 0, void 0, void 0, function* ()
             id,
         },
         include: {
-            product: true,
             owner: true,
-        }
+            product: {
+                include: {
+                    category: true,
+                    productImage: true,
+                    review: true,
+                    shop: true,
+                },
+            },
+        },
     });
     return result;
 });
@@ -66,8 +73,15 @@ const getShopByUserId = (userId) => __awaiter(void 0, void 0, void 0, function* 
         },
         include: {
             owner: true,
-            product: true,
-        }
+            product: {
+                include: {
+                    category: true,
+                    productImage: true,
+                    review: true,
+                    shop: true,
+                },
+            },
+        },
     });
     return result;
 });

@@ -75,7 +75,6 @@ const resetPasswordIntoDB = async (
     },
   });
 
-
   if (!token) {
     throw new AppError(400, 'Token is required');
   }

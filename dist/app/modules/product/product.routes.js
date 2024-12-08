@@ -14,6 +14,7 @@ const router = (0, express_1.Router)();
 router.post('/', (0, auth_1.default)(client_1.Role.ADMIN, client_1.Role.VENDOR), (0, validationRequest_1.default)(product_validation_1.ProductValidations.createProductValidation), product_controller_1.ProductController.createProduct);
 router.post('/product-image', (0, auth_1.default)(client_1.Role.ADMIN, client_1.Role.VENDOR), product_controller_1.ProductController.createProductImage);
 router.get('/', product_controller_1.ProductController.getProducts);
+router.get('/prioritize', (0, auth_1.default)(client_1.Role.USER), product_controller_1.ProductController.getPrioritizeProducts);
 router.get('/:id', product_controller_1.ProductController.getProductById);
 router.put('/:id', (0, auth_1.default)(client_1.Role.ADMIN, client_1.Role.VENDOR), (0, validationRequest_1.default)(product_validation_1.ProductValidations.updateProductValidation), product_controller_1.ProductController.updateProduct);
 router.delete('/:id', (0, auth_1.default)(client_1.Role.ADMIN, client_1.Role.VENDOR), product_controller_1.ProductController.deleteProduct);

@@ -101,7 +101,7 @@ const deleteUserByIdFromDB = async (id: string) => {
     },
   });
 
-  return "User deleted successfully";
+  return 'User deleted successfully';
 };
 
 export const UserServices = {
