@@ -34,6 +34,7 @@ const loginUserFromDB = (payload) => __awaiter(void 0, void 0, void 0, function*
         id: userExists.id,
         email: userExists.email,
         role: userExists.role,
+        status: userExists.status,
     };
     const accessToken = (0, auth_utils_1.createToke)(jwtPayload, config_1.default.jwtSecret, '365d');
     return {
