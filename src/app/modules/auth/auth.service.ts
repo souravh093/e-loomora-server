@@ -27,6 +27,7 @@ const loginUserFromDB = async (payload: User) => {
     id: userExists.id,
     email: userExists.email,
     role: userExists.role,
+    status: userExists.status,
   };
 
   const accessToken = createToke(
