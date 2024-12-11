@@ -23,6 +23,24 @@ router.get(
 );
 
 router.get(
+  '/all-info',
+  auth(Role.ADMIN, Role.VENDOR, Role.USER),
+  OrderController.getAllInfo,
+);
+
+router.get(
+  '/week/:shopId',
+  auth(Role.ADMIN, Role.VENDOR),
+  OrderController.getOrderCountByWeek,
+);
+
+router.get(
+  '/month/:shopId',
+  auth(Role.ADMIN, Role.VENDOR),
+  OrderController.getOrderCountByMonth,
+);
+
+router.get(
   '/:id',
   auth(Role.ADMIN, Role.VENDOR, Role.USER),
   OrderController.getOrderById,

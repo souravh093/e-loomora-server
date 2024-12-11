@@ -3,6 +3,7 @@ import prisma from '../../../db/db.config';
 import { initiatePayment } from '../payment/payment.utils';
 import { TOrder } from '../../types/orderTypes';
 import { buildPrismaQuery } from '../../builder/prismaBuilderQuery';
+import { JwtPayload } from 'jsonwebtoken';
 
 const createOrderIntoDB = async (payload: TOrder) => {
   const result = await prisma.$transaction(async (prisma) => {
@@ -140,9 +141,112 @@ const getOrderByUserIdFromDB = async (query: Record<string, any>) => {
   return result;
 };
 
+const getAllInfoFromDB = async (userData: JwtPayload) => {
+  const shopData = await prisma.shop.findFirstOrThrow({
+    where: {
+      ownerId: userData.id,
+    },
+  });
+
+  const productsCount = await prisma.product.count({
+    where: {
+      shopId: shopData.id,
+    },
+  });
+
+  const ordersCount = await prisma.order.count({
+    where: {
+      shopId: shopData.id,
+    },
+  });
+
+  const totalRevenue = await prisma.order.aggregate({
+    where: {
+      shopId: shopData.id,
+      status: OrderStatus.COMPLETED,
+    },
+    _sum: {
+      totalAmount: true,
+    }
+  })
+
+  return {
+    productsCount,
+    ordersCount,
+    totalRevenue
+  };
+};
+
+const getOrderCountByMonth = async (shopId: string) => {
+  const orders = await prisma.order.findMany({
+    where: {
+      shopId: shopId,
+      status: OrderStatus.COMPLETED,
+    },
+    select: {
+      createdAt: true,
+    },
+  });
+
+  const orderCountByMonth = orders.reduce((acc, order) => {
+    const month = order.createdAt.toLocaleString('default', { month: 'long' });
+    if (!acc[month]) {
+      acc[month] = 0;
+    }
+    acc[month]++;
+    return acc;
+  }, {} as Record<string, number>);
+
+  const chartData = Object.keys(orderCountByMonth).map((month) => ({
+    month,
+    orderCount: orderCountByMonth[month],
+  }));
+
+  return chartData;
+};
+
+const getOrderCountByWeek = async (shopId: string) => {
+  const orders = await prisma.order.findMany({
+    where: {
+      shopId: shopId,
+      status: OrderStatus.COMPLETED,
+    },
+    select: {
+      createdAt: true,
+    },
+  });
+
+  const getStartOfWeek = (date: Date): string => {
+    const day = date.getDay();
+    const diff = date.getDate() - day + (day === 0 ? -6 : 1); 
+    const startOfWeek = new Date(date.setDate(diff));
+    startOfWeek.setHours(0, 0, 0, 0); 
+    return startOfWeek.toISOString().split('T')[0]; 
+  };
+
+  const orderCountByWeek = orders.reduce((acc, order) => {
+    const week = getStartOfWeek(new Date(order.createdAt));
+    if (!acc[week]) {
+      acc[week] = 0;
+    }
+    acc[week]++;
+    return acc;
+  }, {} as Record<string, number>);
+
+  const chartData = Object.keys(orderCountByWeek).map((week) => ({
+    week,
+    orderCount: orderCountByWeek[week],
+  }));
+
+  return chartData;
+};
+
 export const OrderService = {
   createOrderIntoDB,
   getOrdersFromDB,
   getOrderByIdFromDB,
   getOrderByUserIdFromDB,
+  getAllInfoFromDB,
+  getOrderCountByMonth,
+  getOrderCountByWeek,
 };

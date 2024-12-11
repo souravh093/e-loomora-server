@@ -20,7 +20,7 @@ router.post(
 );
 
 router.get('/', auth(Role.ADMIN), UsersController.getUsers);
-router.get('/:id', auth(Role.ADMIN), UsersController.getUserById);
+router.get('/:id', auth(Role.ADMIN, Role.VENDOR, Role.USER), UsersController.getUserById);
 
 router.put(
   '/:id',
