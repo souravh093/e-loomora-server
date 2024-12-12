@@ -50,9 +50,19 @@ const deleteReview = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, v
         message: 'Review deleted successfully',
     });
 }));
+const replayReview = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield review_service_1.ReviewService.replayReview(req.body);
+    (0, sendResponse_1.default)(res, {
+        statusCode: 201,
+        success: true,
+        message: 'Review replayed successfully',
+        data: result,
+    });
+}));
 exports.ReviewController = {
     createReview,
     updateReview,
     deleteReview,
     getReviews,
+    replayReview,
 };

@@ -1,12 +1,8 @@
-import { Review } from '@prisma/client';
+import { ReplayReview, Review } from '@prisma/client';
 import prisma from '../../../db/db.config';
 
 const createReview = async (payload: Review) => {
   const result = await prisma.$transaction(async (prisma) => {
-    const review = await prisma.review.create({
-      data: payload,
-    });
-
     const product = await prisma.product.findUniqueOrThrow({
       where: {
         id: payload.productId,
@@ -18,6 +14,10 @@ const createReview = async (payload: Review) => {
         productId: payload.productId,
         userId: payload.userId,
       },
+    });
+
+    const review = await prisma.review.create({
+      data: payload,
     });
 
     if (isExistUserReview) {
@@ -64,6 +64,7 @@ const getReviews = async (shopId: string) => {
         },
       },
       user: true,
+      replayReview: true,
     },
   });
 
@@ -95,9 +96,28 @@ const deleteReview = async (id: string) => {
   return result;
 };
 
+const replayReview = async (payload: ReplayReview) => {
+  const result = await prisma.$transaction(async (prisma) => {
+    await prisma.review.findUniqueOrThrow({
+      where: {
+        id: payload.reviewId,
+      },
+    });
+
+    const replay = await prisma.replayReview.create({
+      data: payload,
+    });
+
+    return replay;
+  });
+
+  return result;
+};
+
 export const ReviewService = {
   createReview,
   updateReview,
   deleteReview,
   getReviews,
+  replayReview,
 };

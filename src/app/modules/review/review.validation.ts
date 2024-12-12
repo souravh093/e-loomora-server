@@ -14,6 +14,14 @@ const productReviewValidation = z.object({
   }),
 });
 
+const replayReviewValidation = z.object({
+  body: z.object({
+    content: z.string({ required_error: 'Content is required' }),
+    reviewId: z.string({ required_error: 'Review ID is required' }),
+  }),
+});
+
 export const ReviewValidation = {
   productReviewValidation,
+  replayReviewValidation,
 };

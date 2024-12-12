@@ -16,9 +16,6 @@ exports.ReviewService = void 0;
 const db_config_1 = __importDefault(require("../../../db/db.config"));
 const createReview = (payload) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield db_config_1.default.$transaction((prisma) => __awaiter(void 0, void 0, void 0, function* () {
-        const review = yield prisma.review.create({
-            data: payload,
-        });
         const product = yield prisma.product.findUniqueOrThrow({
             where: {
                 id: payload.productId,
@@ -29,6 +26,9 @@ const createReview = (payload) => __awaiter(void 0, void 0, void 0, function* ()
                 productId: payload.productId,
                 userId: payload.userId,
             },
+        });
+        const review = yield prisma.review.create({
+            data: payload,
         });
         if (isExistUserReview) {
             throw new Error('You have already reviewed this product');
@@ -71,6 +71,7 @@ const getReviews = (shopId) => __awaiter(void 0, void 0, void 0, function* () {
                 },
             },
             user: true,
+            replayReview: true,
         },
     });
     return result;
@@ -94,9 +95,24 @@ const deleteReview = (id) => __awaiter(void 0, void 0, void 0, function* () {
     });
     return result;
 });
+const replayReview = (payload) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield db_config_1.default.$transaction((prisma) => __awaiter(void 0, void 0, void 0, function* () {
+        yield prisma.review.findUniqueOrThrow({
+            where: {
+                id: payload.reviewId,
+            },
+        });
+        const replay = yield prisma.replayReview.create({
+            data: payload,
+        });
+        return replay;
+    }));
+    return result;
+});
 exports.ReviewService = {
     createReview,
     updateReview,
     deleteReview,
     getReviews,
+    replayReview,
 };

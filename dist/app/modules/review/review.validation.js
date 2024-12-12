@@ -14,6 +14,13 @@ const productReviewValidation = zod_1.z.object({
         userId: zod_1.z.string({ required_error: 'User ID is required' }),
     }),
 });
+const replayReviewValidation = zod_1.z.object({
+    body: zod_1.z.object({
+        content: zod_1.z.string({ required_error: 'Content is required' }),
+        reviewId: zod_1.z.string({ required_error: 'Review ID is required' }),
+    }),
+});
 exports.ReviewValidation = {
     productReviewValidation,
+    replayReviewValidation,
 };

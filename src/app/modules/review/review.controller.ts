@@ -44,9 +44,21 @@ const deleteReview = catchAsync(async (req, res) => {
   });
 });
 
+const replayReview = catchAsync(async (req, res) => {
+  const result = await ReviewService.replayReview(req.body);
+
+  sendResponse(res, {
+    statusCode: 201,
+    success: true,
+    message: 'Review replayed successfully',
+    data: result,
+  });
+});
+
 export const ReviewController = {
   createReview,
   updateReview,
   deleteReview,
   getReviews,
+  replayReview,
 };

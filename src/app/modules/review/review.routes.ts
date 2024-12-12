@@ -14,6 +14,13 @@ router.post(
   ReviewController.createReview,
 );
 
+router.post(
+  '/reply',
+  auth(Role.VENDOR, Role.ADMIN),
+  validationRequest(ReviewValidation.replayReviewValidation),
+  ReviewController.replayReview,
+);
+
 router.get(
   '/:shopId',
   auth(Role.ADMIN, Role.VENDOR),

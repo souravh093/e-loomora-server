@@ -16,5 +16,8 @@ router.post('/',
 (0, validationRequest_1.default)(order_validation_1.OrderValidations.createOrderValidation), order_controller_1.OrderController.createOrder);
 router.get('/user', (0, auth_1.default)(client_1.Role.USER), order_controller_1.OrderController.getOrderByUserId);
 router.get('/', (0, auth_1.default)(client_1.Role.ADMIN, client_1.Role.VENDOR, client_1.Role.USER), order_controller_1.OrderController.getOrders);
+router.get('/all-info', (0, auth_1.default)(client_1.Role.ADMIN, client_1.Role.VENDOR, client_1.Role.USER), order_controller_1.OrderController.getAllInfo);
+router.get('/week/:shopId', (0, auth_1.default)(client_1.Role.ADMIN, client_1.Role.VENDOR), order_controller_1.OrderController.getOrderCountByWeek);
+router.get('/month/:shopId', (0, auth_1.default)(client_1.Role.ADMIN, client_1.Role.VENDOR), order_controller_1.OrderController.getOrderCountByMonth);
 router.get('/:id', (0, auth_1.default)(client_1.Role.ADMIN, client_1.Role.VENDOR, client_1.Role.USER), order_controller_1.OrderController.getOrderById);
 exports.OrderRoutes = router;

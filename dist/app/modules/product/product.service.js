@@ -35,7 +35,12 @@ const getProductById = (id) => __awaiter(void 0, void 0, void 0, function* () {
         },
         include: {
             productImage: true,
-            review: true,
+            review: {
+                include: {
+                    replayReview: true,
+                    user: true,
+                }
+            },
             category: true,
             shop: true,
         },

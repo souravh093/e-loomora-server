@@ -28,7 +28,12 @@ const getProductById = async (id: string) => {
     },
     include: {
       productImage: true,
-      review: true,
+      review: {
+        include: {
+          replayReview: true,
+          user: true,
+        }
+      },
       category: true,
       shop: true,
     },
