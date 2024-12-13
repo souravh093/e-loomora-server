@@ -32,7 +32,7 @@ const getProductById = async (id: string) => {
         include: {
           replayReview: true,
           user: true,
-        }
+        },
       },
       category: true,
       shop: true,
@@ -78,7 +78,16 @@ const getProducts = async (query: Record<string, any>) => {
   };
 };
 
-const getPrioritizeProduct = async (loggedUser: JwtPayload) => {
+const getPrioritizeProduct = async (
+  loggedUser: JwtPayload,
+  query: Record<string, any>,
+) => {
+  const limit = Number(query.limit) || 10;
+  const page = Number(query.page) || 1;
+  const skip = (page - 1) * limit;
+
+  // console.log(JSON.parse(query.filter.categoryId));
+
   const followedShop = await prisma.shopFollow.findMany({
     where: {
       userId: loggedUser.id,
@@ -92,8 +101,8 @@ const getPrioritizeProduct = async (loggedUser: JwtPayload) => {
         in: followedShop.map((shop) => shop.shopId),
       },
     },
-    skip: 0,
-    take: 10,
+    skip,
+    take: limit,
     orderBy: {
       createdAt: 'desc',
     },
@@ -105,7 +114,24 @@ const getPrioritizeProduct = async (loggedUser: JwtPayload) => {
     },
   });
 
-  return result;
+  const productItems = await prisma.product.count({
+    where: {
+      shopId: {
+        in: followedShop.map((shop) => shop.shopId),
+      },
+    },
+  });
+
+  const totalPages = Math.ceil(productItems / limit);
+
+  return {
+    meta: {
+      total: productItems,
+      limit,
+      page: totalPages,
+    },
+    result,
+  };
 };
 
 const updateProductInDB = async (id: string, payload: Product) => {

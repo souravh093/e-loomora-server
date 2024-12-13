@@ -34,7 +34,7 @@ const getProducts = catchAsync(async (req, res) => {
 });
 
 const getPrioritizeProducts = catchAsync(async (req, res) => {
-  const result = await ProductService.getPrioritizeProduct(req.user);
+  const result = await ProductService.getPrioritizeProduct(req.user, req.query);
 
   sendResponse(res, {
     statusCode: 200,
