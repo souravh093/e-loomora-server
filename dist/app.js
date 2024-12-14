@@ -14,10 +14,7 @@ const db_config_1 = require("./db/db.config");
 const app = (0, express_1.default)();
 // middlewares
 app.use((0, cors_1.default)({
-    origin: [
-        'https://bright-bublanina-7d46a7.netlify.app/',
-        'https://e-loomora-client.onrender.com',
-    ],
+    origin: 'https://bright-bublanina-7d46a7.netlify.app',
     credentials: true,
     methods: ['GET', 'POST', 'PATCH', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization', 'Origin', 'Accept'],

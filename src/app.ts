@@ -12,10 +12,7 @@ const app: Application = express();
 // middlewares
 app.use(
   cors({
-    origin: [
-      'https://bright-bublanina-7d46a7.netlify.app/',
-      'https://e-loomora-client.onrender.com',
-    ],
+    origin: 'https://bright-bublanina-7d46a7.netlify.app',
     credentials: true,
     methods: ['GET', 'POST', 'PATCH', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization', 'Origin', 'Accept'],
