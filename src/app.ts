@@ -12,7 +12,7 @@ const app: Application = express();
 // middlewares
 app.use(
   cors({
-    origin: "*",
+    origin: "https://e-loomora-client.onrender.com",
     credentials: true,
     methods: ['GET', 'POST', 'PATCH', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization', 'Origin', 'Accept'],
