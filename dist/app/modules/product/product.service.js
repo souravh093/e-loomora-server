@@ -39,7 +39,7 @@ const getProductById = (id) => __awaiter(void 0, void 0, void 0, function* () {
                 include: {
                     replayReview: true,
                     user: true,
-                }
+                },
             },
             category: true,
             shop: true,
@@ -75,7 +75,10 @@ const getProducts = (query) => __awaiter(void 0, void 0, void 0, function* () {
         result,
     };
 });
-const getPrioritizeProduct = (loggedUser) => __awaiter(void 0, void 0, void 0, function* () {
+const getPrioritizeProduct = (loggedUser, query) => __awaiter(void 0, void 0, void 0, function* () {
+    const limit = Number(query.limit) || 10;
+    const page = Number(query.page) || 1;
+    const skip = (page - 1) * limit;
     const followedShop = yield db_config_1.default.shopFollow.findMany({
         where: {
             userId: loggedUser.id,
@@ -88,8 +91,8 @@ const getPrioritizeProduct = (loggedUser) => __awaiter(void 0, void 0, void 0, f
                 in: followedShop.map((shop) => shop.shopId),
             },
         },
-        skip: 0,
-        take: 10,
+        skip,
+        take: limit,
         orderBy: {
             createdAt: 'desc',
         },
@@ -100,7 +103,22 @@ const getPrioritizeProduct = (loggedUser) => __awaiter(void 0, void 0, void 0, f
             shop: true,
         },
     });
-    return result;
+    const productItems = yield db_config_1.default.product.count({
+        where: {
+            shopId: {
+                in: followedShop.map((shop) => shop.shopId),
+            },
+        },
+    });
+    const totalPages = Math.ceil(productItems / limit);
+    return {
+        meta: {
+            total: productItems,
+            limit,
+            page: totalPages,
+        },
+        result,
+    };
 });
 const updateProductInDB = (id, payload) => __awaiter(void 0, void 0, void 0, function* () {
     yield db_config_1.default.product.findUniqueOrThrow({

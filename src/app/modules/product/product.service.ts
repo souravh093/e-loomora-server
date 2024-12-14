@@ -86,8 +86,6 @@ const getPrioritizeProduct = async (
   const page = Number(query.page) || 1;
   const skip = (page - 1) * limit;
 
-  // console.log(JSON.parse(query.filter.categoryId));
-
   const followedShop = await prisma.shopFollow.findMany({
     where: {
       userId: loggedUser.id,

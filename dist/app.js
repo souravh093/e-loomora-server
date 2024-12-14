@@ -14,7 +14,7 @@ const db_config_1 = require("./db/db.config");
 const app = (0, express_1.default)();
 // middlewares
 app.use((0, cors_1.default)({
-    origin: true,
+    origin: "*",
     credentials: true,
     methods: ['GET', 'POST', 'PATCH', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization', 'Origin', 'Accept'],

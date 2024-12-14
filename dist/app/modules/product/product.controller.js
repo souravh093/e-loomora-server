@@ -42,7 +42,7 @@ const getProducts = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, vo
     });
 }));
 const getPrioritizeProducts = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield product_service_1.ProductService.getPrioritizeProduct(req.user);
+    const result = yield product_service_1.ProductService.getPrioritizeProduct(req.user, req.query);
     (0, sendResponse_1.default)(res, {
         statusCode: 200,
         success: true,
