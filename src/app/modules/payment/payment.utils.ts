@@ -9,8 +9,8 @@ export const initiatePayment = async (paymentData: TPayment) => {
   const res = await axios.post(config.payment_url!, {
     store_id: config.store_id,
     tran_id: paymentData.transactionId,
-    success_url: `${config.serverUrl}/api/v1/payments/confirmation?transactionId=${paymentData.transactionId}&status=success&email=${paymentData.customerEmail}`,
-    fail_url: `${config.serverUrl}/api/payments/confirmation?status=failed`,
+    success_url: `https://e-loomora-server.onrender.com/api/v1/payments/confirmation?transactionId=${paymentData.transactionId}&status=success&email=${paymentData.customerEmail}`,
+    fail_url: `https://e-loomora-server.onrender.com/api/v1/payments/confirmation?status=failed`,
     cancel_url: config.clientUrl,
     amount: paymentData.amount,
     currency: 'BDT',
