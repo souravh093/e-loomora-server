@@ -22,6 +22,8 @@ router.get(
   OrderController.getOrders,
 );
 
+router.get('/payment', auth(Role.USER), OrderController.getOrdersByUserId);
+
 router.get(
   '/all-info',
   auth(Role.ADMIN, Role.VENDOR, Role.USER),

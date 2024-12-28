@@ -12,7 +12,7 @@ const app: Application = express();
 // middlewares
 app.use(
   cors({
-    origin: 'https://bright-bublanina-7d46a7.netlify.app',
+    origin: 'http://localhost:5173',
     credentials: true,
     methods: ['GET', 'POST', 'PATCH', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization', 'Origin', 'Accept'],

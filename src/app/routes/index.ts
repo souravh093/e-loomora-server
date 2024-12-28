@@ -9,6 +9,7 @@ import { CouponRoutes } from '../modules/coupon/coupon.routes';
 import { OrderRoutes } from '../modules/order/order.routes';
 import { paymentRoutes } from '../modules/payment/payment.route';
 import { ShopFollowRoutes } from '../modules/shopFollow/shopFollow.routes';
+import { SubscriptionRoutes } from '../modules/subscription/subscription.routes';
 
 const router = Router();
 
@@ -52,6 +53,10 @@ const moduleRoutes = [
   {
     path: '/follows-shops',
     route: ShopFollowRoutes,
+  },
+  {
+    path: '/subscriptions',
+    route: SubscriptionRoutes,
   },
 ];
 

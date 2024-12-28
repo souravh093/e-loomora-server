@@ -79,6 +79,17 @@ const getOrderCountByMonth = catchAsync(async (req, res) => {
   });
 });
 
+const getOrdersByUserId = catchAsync(async (req, res) => {
+  const result = await OrderService.getOrdersByUserIdFromDB(req.user.id);
+
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: 'Order fetched successfully',
+    data: result,
+  });
+});
+
 export const OrderController = {
   createOrder,
   getOrders,
@@ -87,4 +98,5 @@ export const OrderController = {
   getAllInfo,
   getOrderCountByWeek,
   getOrderCountByMonth,
+  getOrdersByUserId,
 };

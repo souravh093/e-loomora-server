@@ -167,13 +167,13 @@ const getAllInfoFromDB = async (userData: JwtPayload) => {
     },
     _sum: {
       totalAmount: true,
-    }
-  })
+    },
+  });
 
   return {
     productsCount,
     ordersCount,
-    totalRevenue
+    totalRevenue,
   };
 };
 
@@ -188,14 +188,19 @@ const getOrderCountByMonth = async (shopId: string) => {
     },
   });
 
-  const orderCountByMonth = orders.reduce((acc, order) => {
-    const month = order.createdAt.toLocaleString('default', { month: 'long' });
-    if (!acc[month]) {
-      acc[month] = 0;
-    }
-    acc[month]++;
-    return acc;
-  }, {} as Record<string, number>);
+  const orderCountByMonth = orders.reduce(
+    (acc, order) => {
+      const month = order.createdAt.toLocaleString('default', {
+        month: 'long',
+      });
+      if (!acc[month]) {
+        acc[month] = 0;
+      }
+      acc[month]++;
+      return acc;
+    },
+    {} as Record<string, number>,
+  );
 
   const chartData = Object.keys(orderCountByMonth).map((month) => ({
     month,
@@ -218,20 +223,23 @@ const getOrderCountByWeek = async (shopId: string) => {
 
   const getStartOfWeek = (date: Date): string => {
     const day = date.getDay();
-    const diff = date.getDate() - day + (day === 0 ? -6 : 1); 
+    const diff = date.getDate() - day + (day === 0 ? -6 : 1);
     const startOfWeek = new Date(date.setDate(diff));
-    startOfWeek.setHours(0, 0, 0, 0); 
-    return startOfWeek.toISOString().split('T')[0]; 
+    startOfWeek.setHours(0, 0, 0, 0);
+    return startOfWeek.toISOString().split('T')[0];
   };
 
-  const orderCountByWeek = orders.reduce((acc, order) => {
-    const week = getStartOfWeek(new Date(order.createdAt));
-    if (!acc[week]) {
-      acc[week] = 0;
-    }
-    acc[week]++;
-    return acc;
-  }, {} as Record<string, number>);
+  const orderCountByWeek = orders.reduce(
+    (acc, order) => {
+      const week = getStartOfWeek(new Date(order.createdAt));
+      if (!acc[week]) {
+        acc[week] = 0;
+      }
+      acc[week]++;
+      return acc;
+    },
+    {} as Record<string, number>,
+  );
 
   const chartData = Object.keys(orderCountByWeek).map((week) => ({
     week,
@@ -239,6 +247,19 @@ const getOrderCountByWeek = async (shopId: string) => {
   }));
 
   return chartData;
+};
+
+const getOrdersByUserIdFromDB = async (userId: string) => {
+  const result = await prisma.order.findMany({
+    where: {
+      userId,
+    },
+    include: {
+      Payment: true,
+    },
+  });
+
+  return result;
 };
 
 export const OrderService = {
@@ -249,4 +270,5 @@ export const OrderService = {
   getAllInfoFromDB,
   getOrderCountByMonth,
   getOrderCountByWeek,
+  getOrdersByUserIdFromDB,
 };
