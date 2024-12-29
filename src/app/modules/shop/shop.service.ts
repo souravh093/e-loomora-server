@@ -104,6 +104,7 @@ const getShopsFromDB = async (query: Record<string, any>) => {
     ...shopQuery,
     include: {
       owner: true,
+      product: true,
     },
   });
 

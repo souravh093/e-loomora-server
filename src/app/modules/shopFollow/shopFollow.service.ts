@@ -12,6 +12,17 @@ const followShopIntoDB = async (payload: ShopFollow) => {
     data: payload,
   });
 
+  await prisma.shop.update({
+    where: {
+      id: payload.shopId,
+    },
+    data: {
+      follower: {
+        increment: 1,
+      },
+    },
+  });
+
   return result;
 };
 
@@ -29,6 +40,17 @@ const unfollowShopFromDB = async (payload: ShopFollow) => {
       id: payload.id,
       userId: payload.userId,
       shopId: payload.shopId,
+    },
+  });
+
+  await prisma.shop.update({
+    where: {
+      id: payload.shopId,
+    },
+    data: {
+      follower: {
+        decrement: 1,
+      },
     },
   });
 
