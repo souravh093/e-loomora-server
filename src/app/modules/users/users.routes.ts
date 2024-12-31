@@ -24,7 +24,7 @@ router.get('/:id', auth(Role.ADMIN, Role.VENDOR, Role.USER), UsersController.get
 
 router.put(
   '/:id',
-  auth(Role.ADMIN),
+  auth(Role.ADMIN, Role.VENDOR, Role.USER),
   validationRequest(UserValidations.updateUserValidationSchema),
   UsersController.updateUserById,
 );

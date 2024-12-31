@@ -11,6 +11,7 @@ const coupon_routes_1 = require("../modules/coupon/coupon.routes");
 const order_routes_1 = require("../modules/order/order.routes");
 const payment_route_1 = require("../modules/payment/payment.route");
 const shopFollow_routes_1 = require("../modules/shopFollow/shopFollow.routes");
+const subscription_routes_1 = require("../modules/subscription/subscription.routes");
 const router = (0, express_1.Router)();
 const moduleRoutes = [
     {
@@ -52,6 +53,10 @@ const moduleRoutes = [
     {
         path: '/follows-shops',
         route: shopFollow_routes_1.ShopFollowRoutes,
+    },
+    {
+        path: '/subscriptions',
+        route: subscription_routes_1.SubscriptionRoutes,
     },
 ];
 moduleRoutes.forEach((route) => router.use(route.path, route.route));

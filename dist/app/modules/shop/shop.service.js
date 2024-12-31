@@ -100,6 +100,7 @@ const getShopsFromDB = (query) => __awaiter(void 0, void 0, void 0, function* ()
     const totalPages = Math.ceil(shopItems / shopQuery.take);
     const result = yield db_config_1.default.shop.findMany(Object.assign(Object.assign({}, shopQuery), { include: {
             owner: true,
+            product: true,
         } }));
     return {
         meta: {

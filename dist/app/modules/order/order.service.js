@@ -151,12 +151,12 @@ const getAllInfoFromDB = (userData) => __awaiter(void 0, void 0, void 0, functio
         },
         _sum: {
             totalAmount: true,
-        }
+        },
     });
     return {
         productsCount,
         ordersCount,
-        totalRevenue
+        totalRevenue,
     };
 });
 const getOrderCountByMonth = (shopId) => __awaiter(void 0, void 0, void 0, function* () {
@@ -170,7 +170,9 @@ const getOrderCountByMonth = (shopId) => __awaiter(void 0, void 0, void 0, funct
         },
     });
     const orderCountByMonth = orders.reduce((acc, order) => {
-        const month = order.createdAt.toLocaleString('default', { month: 'long' });
+        const month = order.createdAt.toLocaleString('default', {
+            month: 'long',
+        });
         if (!acc[month]) {
             acc[month] = 0;
         }
@@ -214,6 +216,17 @@ const getOrderCountByWeek = (shopId) => __awaiter(void 0, void 0, void 0, functi
     }));
     return chartData;
 });
+const getOrdersByUserIdFromDB = (userId) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield db_config_1.default.order.findMany({
+        where: {
+            userId,
+        },
+        include: {
+            Payment: true,
+        },
+    });
+    return result;
+});
 exports.OrderService = {
     createOrderIntoDB,
     getOrdersFromDB,
@@ -222,4 +235,5 @@ exports.OrderService = {
     getAllInfoFromDB,
     getOrderCountByMonth,
     getOrderCountByWeek,
+    getOrdersByUserIdFromDB,
 };

@@ -15,4 +15,5 @@ router.post('/login', (0, validationRequest_1.default)(auth_validation_1.AuthVal
 router.post('/forget-password', (0, validationRequest_1.default)(auth_validation_1.AuthValidations.forgetPasswordValidation), auth_controller_1.AuthController.forgetPassword);
 router.post('/reset-password', (0, validationRequest_1.default)(auth_validation_1.AuthValidations.resetPasswordValidation), auth_controller_1.AuthController.resetPassword);
 router.post('/change-password', (0, auth_1.default)(client_1.Role.USER, client_1.Role.ADMIN, client_1.Role.VENDOR), (0, validationRequest_1.default)(auth_validation_1.AuthValidations.changePasswordValidation), auth_controller_1.AuthController.changedPassword);
+router.get('/profile', (0, auth_1.default)(client_1.Role.USER, client_1.Role.ADMIN, client_1.Role.VENDOR), auth_controller_1.AuthController.getProfile);
 exports.AuthRoutes = router;

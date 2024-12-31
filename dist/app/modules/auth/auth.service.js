@@ -103,9 +103,18 @@ const changePasswordIntDB = (email, oldPassword, newPassword) => __awaiter(void 
     });
     return 'Password changed successfully';
 });
+const getProfileFromDB = (user) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield db_config_1.default.user.findUnique({
+        where: {
+            id: user.id,
+        },
+    });
+    return result;
+});
 exports.AuthServices = {
     loginUserFromDB,
     forgetPasswordIntoDB,
     resetPasswordIntoDB,
     changePasswordIntDB,
+    getProfileFromDB,
 };

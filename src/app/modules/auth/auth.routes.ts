@@ -32,4 +32,10 @@ router.post(
   AuthController.changedPassword,
 );
 
+router.get(
+  '/profile',
+  auth(Role.USER, Role.ADMIN, Role.VENDOR),
+  AuthController.getProfile,
+);
+
 export const AuthRoutes = router;

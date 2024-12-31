@@ -55,9 +55,18 @@ const changedPassword = (0, catchAsync_1.default)((req, res) => __awaiter(void 0
         message: result,
     });
 }));
+const getProfile = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield auth_service_1.AuthServices.getProfileFromDB(req.user);
+    (0, sendResponse_1.default)(res, {
+        statusCode: 200,
+        success: true,
+        data: result,
+    });
+}));
 exports.AuthController = {
     loginUser,
     forgetPassword,
     resetPassword,
     changedPassword,
+    getProfile,
 };

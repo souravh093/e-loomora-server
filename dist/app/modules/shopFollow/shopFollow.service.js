@@ -23,6 +23,16 @@ const followShopIntoDB = (payload) => __awaiter(void 0, void 0, void 0, function
     const result = yield db_config_1.default.shopFollow.create({
         data: payload,
     });
+    yield db_config_1.default.shop.update({
+        where: {
+            id: payload.shopId,
+        },
+        data: {
+            follower: {
+                increment: 1,
+            },
+        },
+    });
     return result;
 });
 const unfollowShopFromDB = (payload) => __awaiter(void 0, void 0, void 0, function* () {
@@ -38,6 +48,16 @@ const unfollowShopFromDB = (payload) => __awaiter(void 0, void 0, void 0, functi
             id: payload.id,
             userId: payload.userId,
             shopId: payload.shopId,
+        },
+    });
+    yield db_config_1.default.shop.update({
+        where: {
+            id: payload.shopId,
+        },
+        data: {
+            follower: {
+                decrement: 1,
+            },
         },
     });
     return 'Shop Unfollowed successfully';

@@ -135,9 +135,20 @@ const changePasswordIntDB = async (
   return 'Password changed successfully';
 };
 
+const getProfileFromDB = async (user: JwtPayload) => {
+  const result = await prisma.user.findUnique({
+    where: {
+      id: user.id,
+    },
+  });
+
+  return result;
+};
+
 export const AuthServices = {
   loginUserFromDB,
   forgetPasswordIntoDB,
   resetPasswordIntoDB,
   changePasswordIntDB,
+  getProfileFromDB,
 };
