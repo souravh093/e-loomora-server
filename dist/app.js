@@ -14,6 +14,7 @@ const db_config_1 = require("./db/db.config");
 const app = (0, express_1.default)();
 // middlewares
 app.use((0, cors_1.default)({
+    // origin: 'http://localhost:5173',
     origin: 'https://bright-bublanina-7d46a7.netlify.app',
     credentials: true,
     methods: ['GET', 'POST', 'PATCH', 'PUT', 'DELETE', 'OPTIONS'],
