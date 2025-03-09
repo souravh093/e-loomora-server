@@ -90,6 +90,39 @@ const getOrdersByUserId = catchAsync(async (req, res) => {
   });
 });
 
+const getCustomerOrdersStatus = catchAsync(async (req, res) => {
+  const result = await OrderService.getCustomerOrdersStatus(req.user);
+
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: 'Order status fetched successfully',
+    data: result,
+  });
+});
+
+const getOrderCountByDayOfWeek = catchAsync(async (req, res) => {
+  const result = await OrderService.getOrderCountByDayOfWeek(req.user);
+
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: 'Order count fetched successfully',
+    data: result,
+  });
+});
+
+const getOrderCountByMonthCustomer = catchAsync(async (req, res) => {
+  const result = await OrderService.getOrderCountByMonthCustomer(req.user);
+
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: 'Order count fetched successfully',
+    data: result,
+  });
+});
+
 export const OrderController = {
   createOrder,
   getOrders,
@@ -99,4 +132,7 @@ export const OrderController = {
   getOrderCountByWeek,
   getOrderCountByMonth,
   getOrdersByUserId,
+  getCustomerOrdersStatus,
+  getOrderCountByDayOfWeek,
+  getOrderCountByMonthCustomer,
 };

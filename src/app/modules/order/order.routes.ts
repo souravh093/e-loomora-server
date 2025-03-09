@@ -31,6 +31,24 @@ router.get(
 );
 
 router.get(
+  '/customer/status',
+  auth(Role.USER),
+  OrderController.getCustomerOrdersStatus,
+);
+
+router.get(
+  '/customer/day-of-week',
+  auth(Role.USER),
+  OrderController.getOrderCountByDayOfWeek,
+);
+
+router.get(
+  '/customer/month',
+  auth(Role.USER),
+  OrderController.getOrderCountByMonthCustomer,
+);
+
+router.get(
   '/week/:shopId',
   auth(Role.ADMIN, Role.VENDOR),
   OrderController.getOrderCountByWeek,

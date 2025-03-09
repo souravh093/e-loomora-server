@@ -88,6 +88,33 @@ const getOrdersByUserId = (0, catchAsync_1.default)((req, res) => __awaiter(void
         data: result,
     });
 }));
+const getCustomerOrdersStatus = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield order_service_1.OrderService.getCustomerOrdersStatus(req.user);
+    (0, sendResponse_1.default)(res, {
+        statusCode: 200,
+        success: true,
+        message: 'Order status fetched successfully',
+        data: result,
+    });
+}));
+const getOrderCountByDayOfWeek = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield order_service_1.OrderService.getOrderCountByDayOfWeek(req.user);
+    (0, sendResponse_1.default)(res, {
+        statusCode: 200,
+        success: true,
+        message: 'Order count fetched successfully',
+        data: result,
+    });
+}));
+const getOrderCountByMonthCustomer = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield order_service_1.OrderService.getOrderCountByMonthCustomer(req.user);
+    (0, sendResponse_1.default)(res, {
+        statusCode: 200,
+        success: true,
+        message: 'Order count fetched successfully',
+        data: result,
+    });
+}));
 exports.OrderController = {
     createOrder,
     getOrders,
@@ -97,4 +124,7 @@ exports.OrderController = {
     getOrderCountByWeek,
     getOrderCountByMonth,
     getOrdersByUserId,
+    getCustomerOrdersStatus,
+    getOrderCountByDayOfWeek,
+    getOrderCountByMonthCustomer,
 };

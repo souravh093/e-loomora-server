@@ -227,6 +227,116 @@ const getOrdersByUserIdFromDB = (userId) => __awaiter(void 0, void 0, void 0, fu
     });
     return result;
 });
+const getCustomerOrdersStatus = (loggedUser) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield db_config_1.default.$transaction((prisma) => __awaiter(void 0, void 0, void 0, function* () {
+        const totalOrders = yield prisma.order.count({
+            where: {
+                userId: loggedUser.id,
+            },
+        });
+        const pendingOrders = yield prisma.order.count({
+            where: {
+                userId: loggedUser.id,
+                status: client_1.OrderStatus.PENDING,
+            },
+        });
+        const completedOrders = yield prisma.order.count({
+            where: {
+                userId: loggedUser.id,
+                status: client_1.OrderStatus.COMPLETED,
+            },
+        });
+        const totalAmount = yield prisma.order.aggregate({
+            where: {
+                userId: loggedUser.id,
+            },
+            _sum: {
+                totalAmount: true,
+            },
+        });
+        const cancelOrders = yield prisma.order.count({
+            where: {
+                userId: loggedUser.id,
+                status: client_1.OrderStatus.CANCELLED,
+            },
+        });
+        return {
+            totalOrders,
+            pendingOrders,
+            completedOrders,
+            totalAmount,
+            cancelOrders,
+        };
+    }));
+    return result;
+});
+const getOrderCountByDayOfWeek = (loggedUser) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield db_config_1.default.$transaction((prisma) => __awaiter(void 0, void 0, void 0, function* () {
+        const orders = yield prisma.order.findMany({
+            where: {
+                userId: loggedUser.id,
+            },
+            select: {
+                createdAt: true,
+            },
+        });
+        const getDayOfWeek = (date) => {
+            const day = date.getDay();
+            const days = [
+                'Sunday',
+                'Monday',
+                'Tuesday',
+                'Wednesday',
+                'Thursday',
+                'Friday',
+                'Saturday',
+            ];
+            return days[day];
+        };
+        const orderCountByDayOfWeek = orders.reduce((acc, order) => {
+            const day = getDayOfWeek(new Date(order.createdAt));
+            if (!acc[day]) {
+                acc[day] = 0;
+            }
+            acc[day]++;
+            return acc;
+        }, {});
+        const chartData = Object.keys(orderCountByDayOfWeek).map((day) => ({
+            day,
+            orders: orderCountByDayOfWeek[day],
+        }));
+        return chartData;
+    }));
+    return result;
+});
+const getOrderCountByMonthCustomer = (loggedUser) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield db_config_1.default.$transaction((prisma) => __awaiter(void 0, void 0, void 0, function* () {
+        const orders = yield prisma.order.findMany({
+            where: {
+                userId: loggedUser.id,
+            },
+            select: {
+                createdAt: true,
+            },
+        });
+        const orderCountByMonth = orders.reduce((acc, order) => {
+            const month = order.createdAt.toLocaleString('default', {
+                month: 'long',
+            });
+            if (!acc[month]) {
+                acc[month] = 0;
+            }
+            acc[month]++;
+            return acc;
+        }, {});
+        const chartData = Object.keys(orderCountByMonth).map((month) => ({
+            name: month,
+            orders: orderCountByMonth[month],
+        }));
+        return chartData;
+    }));
+    return result;
+});
 exports.OrderService = {
     createOrderIntoDB,
     getOrdersFromDB,
@@ -236,4 +346,7 @@ exports.OrderService = {
     getOrderCountByMonth,
     getOrderCountByWeek,
     getOrdersByUserIdFromDB,
+    getCustomerOrdersStatus,
+    getOrderCountByDayOfWeek,
+    getOrderCountByMonthCustomer,
 };

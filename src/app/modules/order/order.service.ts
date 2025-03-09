@@ -262,6 +262,140 @@ const getOrdersByUserIdFromDB = async (userId: string) => {
   return result;
 };
 
+const getCustomerOrdersStatus = async (loggedUser: JwtPayload) => {
+  const result = await prisma.$transaction(async (prisma) => {
+    const totalOrders = await prisma.order.count({
+      where: {
+        userId: loggedUser.id,
+      },
+    });
+
+    const pendingOrders = await prisma.order.count({
+      where: {
+        userId: loggedUser.id,
+        status: OrderStatus.PENDING,
+      },
+    });
+
+    const completedOrders = await prisma.order.count({
+      where: {
+        userId: loggedUser.id,
+        status: OrderStatus.COMPLETED,
+      },
+    });
+
+    const totalAmount = await prisma.order.aggregate({
+      where: {
+        userId: loggedUser.id,
+      },
+      _sum: {
+        totalAmount: true,
+      },
+    });
+
+    const cancelOrders = await prisma.order.count({
+      where: {
+        userId: loggedUser.id,
+        status: OrderStatus.CANCELLED,
+      },
+    });
+
+    return {
+      totalOrders,
+      pendingOrders,
+      completedOrders,
+      totalAmount,
+      cancelOrders,
+    };
+  });
+
+  return result;
+};
+
+const getOrderCountByDayOfWeek = async (loggedUser: JwtPayload) => {
+  const result = await prisma.$transaction(async (prisma) => {
+    const orders = await prisma.order.findMany({
+      where: {
+        userId: loggedUser.id,
+      },
+      select: {
+        createdAt: true,
+      },
+    });
+
+    const getDayOfWeek = (date: Date): string => {
+      const day = date.getDay();
+      const days = [
+        'Sunday',
+        'Monday',
+        'Tuesday',
+        'Wednesday',
+        'Thursday',
+        'Friday',
+        'Saturday',
+      ];
+      return days[day];
+    };
+
+    const orderCountByDayOfWeek = orders.reduce(
+      (acc, order) => {
+        const day = getDayOfWeek(new Date(order.createdAt));
+        if (!acc[day]) {
+          acc[day] = 0;
+        }
+        acc[day]++;
+        return acc;
+      },
+      {} as Record<string, number>,
+    );
+
+    const chartData = Object.keys(orderCountByDayOfWeek).map((day) => ({
+      day,
+      orders: orderCountByDayOfWeek[day],
+    }));
+
+    return chartData;
+  });
+
+  return result;
+};
+
+const getOrderCountByMonthCustomer = async (loggedUser: JwtPayload) => {
+  const result = await prisma.$transaction(async (prisma) => {
+    const orders = await prisma.order.findMany({
+      where: {
+        userId: loggedUser.id,
+      },
+      select: {
+        createdAt: true,
+      },
+    });
+
+    const orderCountByMonth = orders.reduce(
+      (acc, order) => {
+        const month = order.createdAt.toLocaleString('default', {
+          month: 'long',
+        });
+        if (!acc[month]) {
+          acc[month] = 0;
+        }
+        acc[month]++;
+        return acc;
+      },
+      {} as Record<string, number>,
+    );
+
+    const chartData = Object.keys(orderCountByMonth).map((month) => ({
+      name: month,
+      orders: orderCountByMonth[month],
+    }));
+
+    return chartData;
+  });
+
+  return result;
+};
+
 export const OrderService = {
   createOrderIntoDB,
   getOrdersFromDB,
@@ -271,4 +405,7 @@ export const OrderService = {
   getOrderCountByMonth,
   getOrderCountByWeek,
   getOrdersByUserIdFromDB,
+  getCustomerOrdersStatus,
+  getOrderCountByDayOfWeek,
+  getOrderCountByMonthCustomer,
 };
